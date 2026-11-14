@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { hashPassword } from "better-auth/crypto";
 
 const prisma = new PrismaClient();
 
@@ -14,7 +15,7 @@ async function main() {
       storeName: "FAAVY",
       currency: "NGN",
       whatsappNumber: "2348140000000",
-      contactEmail: "concierge@faavy.ng",
+      contactEmail: "favourohieku@gmail.com",
       contactPhone: "+234 814 000 0000",
       storeAddress: "Oye-Ekiti, Ekiti State, Nigeria",
       announcementBanner: "Complimentary nationwide courier delivery on orders over ₦100,000",
@@ -26,7 +27,7 @@ async function main() {
   console.log("✓ Store settings initialized");
 
   // 2. Initial Admin User
-  const adminEmail = "admin@faavy.ng";
+  const adminEmail = "favourohieku@gmail.com";
   const existingAdmin = await prisma.user.findUnique({
     where: { email: adminEmail },
   });
@@ -41,18 +42,16 @@ async function main() {
       },
     });
 
-    // Create credential account for Better Auth
-    // In Better Auth, password hashing is handled via internal crypto or we can link account
+    const hashedPassword = await hashPassword("Admin@Faavy2026!");
     await prisma.account.create({
       data: {
         userId: adminUser.id,
         accountId: adminUser.id,
         providerId: "credential",
-        // Hashed password representation for 'Admin@Faavy2026!'
-        password: "argon2id$v=19$m=65536,t=3,p=4$qFq8PjG/l8c6a2r5y7xZ$FaavyAdminSecuredPass2026!",
+        password: hashedPassword,
       },
     });
-    console.log("✓ Admin user created: admin@faavy.ng");
+    console.log("✓ Admin user created: favourohieku@gmail.com");
   }
 
   // 3. Categories

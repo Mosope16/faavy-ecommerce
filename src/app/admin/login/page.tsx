@@ -8,7 +8,7 @@ import { signIn } from "@/lib/auth-client";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@faavy.ng");
+  const [email, setEmail] = useState("favourohieku@gmail.com");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -76,7 +76,7 @@ export default function AdminLoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@faavy.ng"
+                placeholder="favourohieku@gmail.com"
                 className="w-full bg-[#1F1F1F] border border-[#333333] pl-10 pr-4 py-3 text-xs text-white placeholder-neutral-500 focus:border-[#C5A880] focus:outline-hidden"
               />
             </div>
