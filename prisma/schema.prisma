@@ -1,0 +1,446 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// -------------------------------------------------------------
+// USER & AUTHENTICATION (Better Auth compatible)
+// -------------------------------------------------------------
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  role          Role      @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions      Session[]
+  accounts      Account[]
+  customer      Customer?
+
+  @@index([email])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+// -------------------------------------------------------------
+// CUSTOMER & ADDRESS
+// -------------------------------------------------------------
+
+model Customer {
+  id        String    @id @default(cuid())
+  userId    String?   @unique
+  email     String    @unique
+  fullName  String
+  phone     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user      User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  addresses Address[]
+  orders    Order[]
+
+  @@index([email])
+  @@index([phone])
+}
+
+model Address {
+  id                   String    @id @default(cuid())
+  customerId           String?
+  fullName             String
+  phone                String
+  email                String
+  streetAddress        String
+  city                 String
+  state                String
+  postalCode           String?
+  deliveryInstructions String?
+  isDefault            Boolean   @default(false)
+  createdAt            DateTime  @default(now())
+
+  customer             Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  orders               Order[]
+
+  @@index([customerId])
+}
+
+// -------------------------------------------------------------
+// CATALOGUE & PRODUCTS
+// -------------------------------------------------------------
+
+model Category {
+  id           String    @id @default(cuid())
+  name         String
+  slug         String    @unique
+  description  String?
+  imageUrl     String?
+  displayOrder Int       @default(0)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  products     Product[]
+
+  @@index([slug])
+  @@index([isActive, displayOrder])
+}
+
+model Product {
+  id               String           @id @default(cuid())
+  name             String
+  slug             String           @unique
+  description      String
+  details          String?
+  careInstructions String?
+  categoryId       String
+  isFeatured       Boolean          @default(false)
+  isActive         Boolean          @default(true)
+  isMadeToOrder    Boolean          @default(false)
+  leadTimeDays     Int              @default(0)
+  basePriceInKobo  Int              // Integer Kobo (e.g. ₦35,000 = 3500000)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  category         Category         @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  variants         ProductVariant[]
+  images           ProductImage[]
+  cartItems        CartItem[]
+  orderItems       OrderItem[]
+
+  @@index([categoryId])
+  @@index([slug])
+  @@index([isActive, isFeatured])
+}
+
+model ProductVariant {
+  id                    String              @id @default(cuid())
+  productId             String
+  name                  String              // e.g. "Black / Large" or "Size 42"
+  sku                   String              @unique
+  size                  String?             // e.g. "S", "M", "L", "XL", "42", "44"
+  color                 String?             // e.g. "Midnight Black", "Champagne Gold"
+  colorHex              String?             // e.g. "#1A1A1A"
+  additionalPriceInKobo Int                 @default(0) // Additional price in Kobo over basePrice
+  stockQuantity         Int                 @default(0)
+  isActive              Boolean             @default(true)
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+
+  product               Product             @relation(fields: [productId], references: [id], onDelete: Cascade)
+  cartItems             CartItem[]
+  orderItems            OrderItem[]
+  inventoryMovements    InventoryMovement[]
+
+  @@index([productId])
+  @@index([sku])
+}
+
+model ProductImage {
+  id           String   @id @default(cuid())
+  productId    String
+  url          String
+  publicId     String?  // Cloudinary public_id
+  altText      String?
+  isPrimary    Boolean  @default(false)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+// -------------------------------------------------------------
+// CART & SHOPPING BAG
+// -------------------------------------------------------------
+
+model Cart {
+  id           String     @id @default(cuid())
+  sessionToken String     @unique // For guests & authenticated sessions
+  customerId   String?
+  expiresAt    DateTime
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  items        CartItem[]
+
+  @@index([sessionToken])
+}
+
+model CartItem {
+  id         String          @id @default(cuid())
+  cartId     String
+  productId  String
+  variantId  String?
+  quantity   Int             @default(1)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  cart       Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product    Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variant    ProductVariant? @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId, variantId])
+  @@index([cartId])
+}
+
+// -------------------------------------------------------------
+// ORDERS & CHECKOUT
+// -------------------------------------------------------------
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  PROCESSING
+  READY_FOR_DISPATCH
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id                String      @id @default(cuid())
+  orderNumber       String      @unique // e.g. "FAV-20261114-0012"
+  customerId        String?
+  customerEmail     String
+  customerName      String
+  customerPhone     String
+  shippingAddressId String?
+  status            OrderStatus @default(PENDING_PAYMENT)
+  
+  // Amounts stored in integer Kobo
+  subtotalInKobo    Int
+  discountInKobo    Int         @default(0)
+  shippingFeeInKobo Int         @default(0)
+  totalInKobo       Int
+
+  discountCode      String?
+  notes             String?     // Customer delivery instructions or notes
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  customer          Customer?   @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  shippingAddress   Address?    @relation(fields: [shippingAddressId], references: [id], onDelete: SetNull)
+  items             OrderItem[]
+  payments          Payment[]
+  shipments         Shipment[]
+
+  @@index([orderNumber])
+  @@index([customerEmail])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id               String          @id @default(cuid())
+  orderId          String
+  productId        String?
+  variantId        String?
+
+  // Financial & inventory snapshots at time of order
+  productName      String
+  variantName      String?
+  sku              String
+  unitPriceInKobo  Int             // Price per item in Kobo
+  quantity         Int
+  totalInKobo      Int             // unitPriceInKobo * quantity
+  createdAt        DateTime        @default(now())
+
+  order            Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product          Product?        @relation(fields: [productId], references: [id], onDelete: SetNull)
+  variant          ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+}
+
+// -------------------------------------------------------------
+// PAYMENTS
+// -------------------------------------------------------------
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  orderId       String
+  reference     String        @unique // Paystack transaction reference
+  provider      String        @default("PAYSTACK")
+  status        PaymentStatus @default(PENDING)
+  amountInKobo  Int
+  currency      String        @default("NGN")
+  channel       String?       // card, bank, ussd, qr
+  paidAt        DateTime?
+  metadata      Json?
+  rawPayload    Json?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([reference])
+  @@index([status])
+}
+
+// -------------------------------------------------------------
+// SHIPMENT & LOGISTICS
+// -------------------------------------------------------------
+
+enum ShipmentStatus {
+  PENDING
+  DISPATCHED
+  IN_TRANSIT
+  DELIVERED
+  FAILED
+}
+
+model Shipment {
+  id                String         @id @default(cuid())
+  orderId           String
+  provider          String         @default("MANUAL") // MANUAL, SHIPBUBBLE, GIGL
+  trackingNumber    String?
+  status            ShipmentStatus @default(PENDING)
+  waybillUrl        String?
+  carrierName       String?        // e.g. "GIG Logistics", "FAAVY Direct Dispatch"
+  estimatedDelivery DateTime?
+  dispatchedAt      DateTime?
+  deliveredAt       DateTime?
+  notes             String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  order             Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([trackingNumber])
+}
+
+// -------------------------------------------------------------
+// INVENTORY AUDIT MOVEMENTS
+// -------------------------------------------------------------
+
+enum MovementReason {
+  SALE
+  RESTOCK
+  DAMAGE
+  RETURN
+  CORRECTION
+}
+
+model InventoryMovement {
+  id             String         @id @default(cuid())
+  variantId      String
+  quantityChange Int            // Negative for reduction, positive for addition
+  reason         MovementReason
+  orderNumber    String?
+  notes          String?
+  createdAt      DateTime       @default(now())
+
+  variant        ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@index([variantId])
+  @@index([createdAt])
+}
+
+// -------------------------------------------------------------
+// DISCOUNTS & PROMOTIONS
+// -------------------------------------------------------------
+
+model Discount {
+  id                  String    @id @default(cuid())
+  code                String    @unique
+  description         String?
+  discountPercent     Int?      // e.g. 10 for 10%
+  discountAmountInKobo Int?     // Fixed amount off in Kobo
+  minSpendInKobo      Int       @default(0)
+  maxUses             Int?
+  usedCount           Int       @default(0)
+  isActive            Boolean   @default(true)
+  expiresAt           DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([code])
+  @@index([isActive])
+}
+
+// -------------------------------------------------------------
+// STORE CONFIGURATION SETTINGS
+// -------------------------------------------------------------
+
+model StoreSettings {
+  id                           String   @id @default("default")
+  storeName                    String   @default("FAAVY")
+  currency                     String   @default("NGN")
+  whatsappNumber               String   @default("2348000000000")
+  contactEmail                 String   @default("concierge@faavy.ng")
+  contactPhone                 String   @default("+234 800 000 0000")
+  storeAddress                 String   @default("Oye-Ekiti, Ekiti State, Nigeria")
+  announcementBanner           String?  @default("Complimentary shipping across Nigeria on orders over ₦100,000")
+  standardShippingFeeInKobo     Int      @default(350000) // ₦3,500
+  freeShippingThresholdInKobo  Int      @default(10000000) // ₦100,000
+  instagramHandle              String   @default("faavyofficial")
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+}
