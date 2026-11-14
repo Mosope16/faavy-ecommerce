@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -13,14 +14,18 @@ import {
   Shield,
 } from "lucide-react";
 import { getAdminSession } from "@/lib/admin-auth";
+import { AdminLogoutButton } from "@/components/admin/admin-logout-button";
 
-export default async function AdminLayout({
+export default async function AdminDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const session = await getAdminSession();
-  const adminEmail = session?.user?.email || "favourohieku@gmail.com";
+  if (!session || session.user.role !== "ADMIN") {
+    redirect("/admin/login");
+  }
+  const adminEmail = session.user.email;
   const navItems = [
     { label: "Overview", href: "/admin", icon: LayoutDashboard },
     { label: "Orders", href: "/admin/orders", icon: ShoppingBag },
@@ -100,6 +105,7 @@ export default async function AdminLayout({
           <div className="flex items-center gap-4 text-xs">
             <span className="text-neutral-400">Signed in as:</span>
             <span className="font-semibold text-[#C5A880]">{adminEmail}</span>
+            <AdminLogoutButton />
           </div>
         </header>
 

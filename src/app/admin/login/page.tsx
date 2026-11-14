@@ -8,7 +8,7 @@ import { signIn } from "@/lib/auth-client";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("favourohieku@gmail.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -31,9 +31,9 @@ export default function AdminLoginPage() {
         router.push("/admin");
         router.refresh();
       }
-    } catch {
-      // In development sandbox fallback
-      router.push("/admin");
+    } catch (err) {
+      console.error("Login request failed:", err);
+      setErrorMsg("Authentication failed. Please verify your credentials and network connection.");
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +76,7 @@ export default function AdminLoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="favourohieku@gmail.com"
+                placeholder="staff@faavy.ng"
                 className="w-full bg-[#1F1F1F] border border-[#333333] pl-10 pr-4 py-3 text-xs text-white placeholder-neutral-500 focus:border-[#C5A880] focus:outline-hidden"
               />
             </div>
