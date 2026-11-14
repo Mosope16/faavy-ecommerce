@@ -42,7 +42,7 @@ export default function ContactPage() {
                   <Mail className="h-4 w-4 text-[#8C6F45] shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-[#1A1A1A]">Direct Email</strong>
-                    <span>concierge@faavy.ng</span>
+                    <span>favourohieku@gmail.com</span>
                   </div>
                 </div>
 

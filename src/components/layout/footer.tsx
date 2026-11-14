@@ -75,7 +75,7 @@ export function Footer() {
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="h-3.5 w-3.5 text-[#C5A880]" />
-                <span>concierge@faavy.ng</span>
+                <span>favourohieku@gmail.com</span>
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="h-3.5 w-3.5 text-[#C5A880]" />
