@@ -2,10 +2,15 @@ import React from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import { ProductDetailView } from "@/components/product/product-detail-view";
 import { ProductCard } from "@/components/ui/product-card";
 import { StaggerContainer, StaggerItem } from "@/components/motion/stagger-container";
 import { ArrowLeft } from "lucide-react";
+
+type ProductWithDetails = Prisma.ProductGetPayload<{
+  include: { category: true; images: true; variants: true };
+}>;
 
 export const dynamic = "force-dynamic";
 
@@ -18,38 +23,48 @@ interface ProductPageProps {
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
 
-  const [product, storeSettings] = await Promise.all([
-    prisma.product.findUnique({
-      where: { slug },
-      include: {
-        category: true,
-        images: { orderBy: { displayOrder: "asc" } },
-        variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
-      },
-    }),
-    prisma.storeSettings.findUnique({
-      where: { id: "default" },
-    }),
-  ]);
+  let product: ProductWithDetails | null = null;
+  let storeSettings: Awaited<ReturnType<typeof prisma.storeSettings.findUnique>> = null;
+  let relatedProducts: ProductWithDetails[] = [];
 
+  try {
+    [product, storeSettings] = await Promise.all([
+      prisma.product.findUnique({
+        where: { slug },
+        include: {
+          category: true,
+          images: { orderBy: { displayOrder: "asc" } },
+          variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
+        },
+      }),
+      prisma.storeSettings.findUnique({
+        where: { id: "default" },
+      }),
+    ]);
+
+    if (product?.isActive) {
+      relatedProducts = await prisma.product.findMany({
+        where: {
+          categoryId: product.categoryId,
+          id: { not: product.id },
+          isActive: true,
+        },
+        include: {
+          category: true,
+          images: { orderBy: { displayOrder: "asc" } },
+          variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
+        },
+        take: 3,
+      });
+    }
+  } catch (err) {
+    console.error("[ProductPage] Database fetch failed:", err);
+  }
+
+  // Product not found or inactive — show 404
   if (!product || !product.isActive) {
     notFound();
   }
-
-  // Load related products from the same category
-  const relatedProducts = await prisma.product.findMany({
-    where: {
-      categoryId: product.categoryId,
-      id: { not: product.id },
-      isActive: true,
-    },
-    include: {
-      category: true,
-      images: { orderBy: { displayOrder: "asc" } },
-      variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
-    },
-    take: 3,
-  });
 
   return (
     <div className="bg-[#FAF8F5] min-h-screen py-8 lg:py-14">

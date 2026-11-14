@@ -2,10 +2,19 @@ import React from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import { ProductCard } from "@/components/ui/product-card";
 import { FadeIn } from "@/components/motion/fade-in";
 import { StaggerContainer, StaggerItem } from "@/components/motion/stagger-container";
 import { ArrowLeft } from "lucide-react";
+
+type CategoryWithProducts = Prisma.CategoryGetPayload<{
+  include: {
+    products: {
+      include: { category: true; images: true; variants: true };
+    };
+  };
+}>;
 
 export const dynamic = "force-dynamic";
 
@@ -18,20 +27,26 @@ interface CategoryPageProps {
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params;
 
-  const category = await prisma.category.findUnique({
-    where: { slug },
-    include: {
-      products: {
-        where: { isActive: true },
-        include: {
-          category: true,
-          images: { orderBy: { displayOrder: "asc" } },
-          variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
+  let category: CategoryWithProducts | null = null;
+
+  try {
+    category = await prisma.category.findUnique({
+      where: { slug },
+      include: {
+        products: {
+          where: { isActive: true },
+          include: {
+            category: true,
+            images: { orderBy: { displayOrder: "asc" } },
+            variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
+          },
+          orderBy: { createdAt: "desc" },
         },
-        orderBy: { createdAt: "desc" },
       },
-    },
-  });
+    });
+  } catch (err) {
+    console.error("[CategoryPage] Database fetch failed:", err);
+  }
 
   if (!category) {
     notFound();

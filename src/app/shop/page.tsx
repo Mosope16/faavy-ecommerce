@@ -1,10 +1,17 @@
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@prisma/client";
 import { ProductCard } from "@/components/ui/product-card";
 import { FadeIn } from "@/components/motion/fade-in";
 import { StaggerContainer, StaggerItem } from "@/components/motion/stagger-container";
 import { Filter, Search as SearchIcon, X } from "lucide-react";
+
+type ShopProduct = Prisma.ProductGetPayload<{
+  include: { category: true; images: true; variants: true };
+}>;
+
+type ShopCategory = Prisma.CategoryGetPayload<Record<string, never>>;
 
 export const dynamic = "force-dynamic";
 
@@ -58,21 +65,28 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     orderBy = { basePriceInKobo: "desc" };
   }
 
-  const [products, categories] = await Promise.all([
-    prisma.product.findMany({
-      where: whereClause,
-      include: {
-        category: true,
-        images: { orderBy: { displayOrder: "asc" } },
-        variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
-      },
-      orderBy,
-    }),
-    prisma.category.findMany({
-      where: { isActive: true },
-      orderBy: { displayOrder: "asc" },
-    }),
-  ]);
+  let products: ShopProduct[] = [];
+  let categories: ShopCategory[] = [];
+
+  try {
+    [products, categories] = await Promise.all([
+      prisma.product.findMany({
+        where: whereClause,
+        include: {
+          category: true,
+          images: { orderBy: { displayOrder: "asc" } },
+          variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
+        },
+        orderBy,
+      }),
+      prisma.category.findMany({
+        where: { isActive: true },
+        orderBy: { displayOrder: "asc" },
+      }),
+    ]);
+  } catch (err) {
+    console.error("[ShopPage] Database fetch failed:", err);
+  }
 
   return (
     <div className="bg-[#FAF8F5] min-h-screen py-10 lg:py-16">
