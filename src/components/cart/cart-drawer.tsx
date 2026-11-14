@@ -123,13 +123,19 @@ export function CartDrawer() {
               ) : (
                 items.map((item) => (
                   <div key={item.variantId} className="flex gap-4 py-4">
-                    <div className="relative h-24 w-20 shrink-0 overflow-hidden bg-[#F5F2EB] border border-[#E8E3D8]">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                      />
+                    <div className="relative h-24 w-20 shrink-0 overflow-hidden bg-[#F5F2EB] border border-[#E8E3D8] flex items-center justify-center">
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-[#F5F2EB] to-[#E8E3D8]">
+                          <span className="font-serif-luxury text-sm text-[#8C6F45] italic">F</span>
+                        </div>
+                      )}
                     </div>
                     <div className="flex flex-1 flex-col justify-between">
                       <div>

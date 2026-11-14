@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import Link from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ShoppingBag,
@@ -78,19 +78,8 @@ export function ProductDetailView({
   const currentPriceInKobo =
     product.basePriceInKobo + (activeVariant?.additionalPriceInKobo || 0);
 
-  const images =
-    product.images.length > 0
-      ? product.images
-      : [
-          {
-            id: "fallback",
-            url: "/images/products/suit-double-breasted.jpg",
-            altText: product.name,
-            isPrimary: true,
-          },
-        ];
-
-  const currentImage = images[selectedImageIndex] || images[0];
+  const images = product.images;
+  const currentImage = images.length > 0 ? images[selectedImageIndex] || images[0] : null;
 
   const isOutOfStock =
     !product.isMadeToOrder && (activeVariant?.stockQuantity || 0) <= 0;
@@ -106,7 +95,7 @@ export function ProductDetailView({
         variantName: activeVariant.name,
         sku: activeVariant.sku,
         priceInKobo: currentPriceInKobo,
-        image: currentImage.url,
+        image: currentImage?.url || "",
         maxStock: activeVariant.stockQuantity,
         isMadeToOrder: product.isMadeToOrder,
         leadTimeDays: product.leadTimeDays,
@@ -159,25 +148,42 @@ export function ProductDetailView({
 
         {/* Main Image Frame */}
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#F5F2EB] border border-[#E8E3D8]">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentImage.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.35, ease: LUXURY_EASE }}
-              className="relative h-full w-full"
-            >
-              <Image
-                src={currentImage.url}
-                alt={currentImage.altText || product.name}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 650px"
-                className="object-cover object-top"
-              />
-            </motion.div>
-          </AnimatePresence>
+          {currentImage ? (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentImage.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.35, ease: LUXURY_EASE }}
+                className="relative h-full w-full"
+              >
+                <Image
+                  src={currentImage.url}
+                  alt={currentImage.altText || product.name}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 650px"
+                  className="object-cover object-top"
+                />
+              </motion.div>
+            </AnimatePresence>
+          ) : (
+            <div className="h-full w-full flex flex-col items-center justify-center bg-gradient-to-br from-[#F5F2EB] to-[#E8E3D8] p-10 text-center select-none">
+              <div className="w-20 h-20 rounded-full border border-[#C5A880]/50 flex items-center justify-center mb-4">
+                <span className="font-serif-luxury text-3xl text-[#8C6F45] italic">F</span>
+              </div>
+              <span className="text-xs uppercase font-semibold tracking-[0.25em] text-[#8C6F45]">
+                FAAVY Atelier
+              </span>
+              <h3 className="font-serif-luxury text-base text-neutral-800 mt-2 max-w-xs font-normal">
+                {product.name}
+              </h3>
+              <span className="text-[10px] uppercase tracking-wider text-neutral-500 mt-3">
+                Sartorial Commission
+              </span>
+            </div>
+          )}
 
           {/* Badge */}
           <div className="absolute top-4 left-4 z-10">

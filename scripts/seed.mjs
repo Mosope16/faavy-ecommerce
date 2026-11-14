@@ -61,56 +61,56 @@ async function main() {
       name: "Jackets & Suits",
       slug: "jackets-suits",
       description: "Bespoke two-piece suits and handcrafted corporate power blazers tailored for executive distinction.",
-      imageUrl: "/images/products/suit-double-breasted.jpg",
+      imageUrl: null,
       displayOrder: 1,
     },
     {
       name: "Corporate Gowns",
       slug: "corporate-gowns",
       description: "Structured silhouette dresses and executive midi gowns designed for modern boardrooms.",
-      imageUrl: "/images/products/corporate-gown-emerald.jpg",
+      imageUrl: null,
       displayOrder: 2,
     },
     {
       name: "Shirts",
       slug: "shirts",
       description: "Impeccably tailored Egyptian cotton oxford and pinpoint corporate shirts.",
-      imageUrl: "https://images.unsplash.com/photo-1620012253295-c15c429fbb41?auto=format&fit=crop&q=80&w=800",
+      imageUrl: null,
       displayOrder: 3,
     },
     {
       name: "Trousers",
       slug: "trousers",
       description: "Cleanly pressed wool-blend and pleated executive trousers with custom waistbands.",
-      imageUrl: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&q=80&w=800",
+      imageUrl: null,
       displayOrder: 4,
     },
     {
       name: "Skirts",
       slug: "skirts",
       description: "High-waisted tailored pencil and A-line corporate skirts in breathable fabrics.",
-      imageUrl: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&q=80&w=800",
+      imageUrl: null,
       displayOrder: 5,
     },
     {
       name: "Shoes",
       slug: "shoes",
       description: "Handcrafted calfskin leather Oxfords, double monk straps, and corporate block heels.",
-      imageUrl: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&q=80&w=800",
+      imageUrl: null,
       displayOrder: 6,
     },
     {
       name: "Ties & Accessories",
       slug: "ties-accessories",
       description: "Pure jacquard silk neckties, pocket squares, and gold-plated cufflinks.",
-      imageUrl: "https://images.unsplash.com/photo-1589756823695-278bc923f962?auto=format&fit=crop&q=80&w=800",
+      imageUrl: null,
       displayOrder: 7,
     },
     {
       name: "Perfume Oils",
       slug: "perfume-oils",
       description: "Long-lasting artisanal corporate fragrance oils crafted from agarwood, amber, and bergamot.",
-      imageUrl: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=800",
+      imageUrl: null,
       displayOrder: 8,
     },
   ];
@@ -140,10 +140,7 @@ async function main() {
       isMadeToOrder: true,
       leadTimeDays: 10,
       basePriceInKobo: 18500000, // ₦185,000
-      images: [
-        { url: "/images/products/suit-double-breasted.jpg", isPrimary: true, altText: "The Sovereign Double-Breasted Suit in Charcoal" },
-        { url: "/images/products/executive-blazer-noir.jpg", isPrimary: false, altText: "Suit styling details and lapel finish" },
-      ],
+      images: [],
       variants: [
         { name: "Charcoal Grey / 38R", sku: "SOV-DB-CH-38R", size: "38R", color: "Charcoal Grey", colorHex: "#2C2C2C", stockQuantity: 3, additionalPriceInKobo: 0 },
         { name: "Charcoal Grey / 40R", sku: "SOV-DB-CH-40R", size: "40R", color: "Charcoal Grey", colorHex: "#2C2C2C", stockQuantity: 5, additionalPriceInKobo: 0 },
@@ -165,10 +162,7 @@ async function main() {
       isMadeToOrder: false,
       leadTimeDays: 0,
       basePriceInKobo: 7800000, // ₦78,000
-      images: [
-        { url: "/images/products/corporate-gown-emerald.jpg", isPrimary: true, altText: "The Victoria Emerald Sheath Gown Front View" },
-        { url: "/images/editorial/hero-banner.jpg", isPrimary: false, altText: "Editorial boardroom setting" },
-      ],
+      images: [],
       variants: [
         { name: "Emerald / Small (UK 8)", sku: "VIC-GWN-EM-S", size: "UK 8", color: "Emerald Green", colorHex: "#0D4D3A", stockQuantity: 6, additionalPriceInKobo: 0 },
         { name: "Emerald / Medium (UK 10)", sku: "VIC-GWN-EM-M", size: "UK 10", color: "Emerald Green", colorHex: "#0D4D3A", stockQuantity: 8, additionalPriceInKobo: 0 },
@@ -189,9 +183,7 @@ async function main() {
       isMadeToOrder: false,
       leadTimeDays: 0,
       basePriceInKobo: 4200000, // ₦42,000
-      images: [
-        { url: "https://images.unsplash.com/photo-1620012253295-c15c429fbb41?auto=format&fit=crop&q=80&w=800", isPrimary: true, altText: "The Monarch Oxford Shirt in Crisp White" },
-      ],
+      images: [],
       variants: [
         { name: "Crisp White / 15.5 (39cm)", sku: "MON-SH-WH-155", size: "15.5", color: "Crisp White", colorHex: "#FFFFFF", stockQuantity: 12, additionalPriceInKobo: 0 },
         { name: "Crisp White / 16.0 (41cm)", sku: "MON-SH-WH-160", size: "16.0", color: "Crisp White", colorHex: "#FFFFFF", stockQuantity: 15, additionalPriceInKobo: 0 },
@@ -212,9 +204,7 @@ async function main() {
       isMadeToOrder: false,
       leadTimeDays: 0,
       basePriceInKobo: 5200000, // ₦52,000
-      images: [
-        { url: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&q=80&w=800", isPrimary: true, altText: "Mayfair Pleated Trousers" },
-      ],
+      images: [],
       variants: [
         { name: "Dark Navy / 32", sku: "MAY-TR-NV-32", size: "32", color: "Dark Navy", colorHex: "#121A2C", stockQuantity: 6, additionalPriceInKobo: 0 },
         { name: "Dark Navy / 34", sku: "MAY-TR-NV-34", size: "34", color: "Dark Navy", colorHex: "#121A2C", stockQuantity: 8, additionalPriceInKobo: 0 },
@@ -234,9 +224,7 @@ async function main() {
       isMadeToOrder: true,
       leadTimeDays: 14,
       basePriceInKobo: 11500000, // ₦115,000
-      images: [
-        { url: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&q=80&w=800", isPrimary: true, altText: "Kensington Handcrafted Wholecut Oxfords" },
-      ],
+      images: [],
       variants: [
         { name: "Chestnut Brown / EU 42", sku: "KEN-SH-BR-42", size: "EU 42", color: "Chestnut Brown", colorHex: "#4A2711", stockQuantity: 4, additionalPriceInKobo: 0 },
         { name: "Chestnut Brown / EU 43", sku: "KEN-SH-BR-43", size: "EU 43", color: "Chestnut Brown", colorHex: "#4A2711", stockQuantity: 5, additionalPriceInKobo: 0 },
@@ -256,9 +244,7 @@ async function main() {
       isMadeToOrder: false,
       leadTimeDays: 0,
       basePriceInKobo: 2400000, // ₦24,000
-      images: [
-        { url: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=800", isPrimary: true, altText: "Nirvana Royale Crystal Bottle" },
-      ],
+      images: [],
       variants: [
         { name: "12ml Crystal Dropper", sku: "NIR-OIL-12ML", size: "12ml", color: "Amber Gold", colorHex: "#D4AF37", stockQuantity: 25, additionalPriceInKobo: 0 },
         { name: "25ml Executive Flacon", sku: "NIR-OIL-25ML", size: "25ml", color: "Amber Gold", colorHex: "#D4AF37", stockQuantity: 14, additionalPriceInKobo: 1600000 },
@@ -276,9 +262,7 @@ async function main() {
       isMadeToOrder: false,
       leadTimeDays: 0,
       basePriceInKobo: 1650000, // ₦16,500
-      images: [
-        { url: "https://images.unsplash.com/photo-1589756823695-278bc923f962?auto=format&fit=crop&q=80&w=800", isPrimary: true, altText: "The Regency Silk Necktie" },
-      ],
+      images: [],
       variants: [
         { name: "Champagne Gold Foulard", sku: "REG-TIE-GD", size: "One Size", color: "Champagne Gold", colorHex: "#C5A880", stockQuantity: 18, additionalPriceInKobo: 0 },
         { name: "Burgundy Pin-Dot", sku: "REG-TIE-BG", size: "One Size", color: "Burgundy", colorHex: "#6B1D2F", stockQuantity: 15, additionalPriceInKobo: 0 },
@@ -297,9 +281,7 @@ async function main() {
       isMadeToOrder: false,
       leadTimeDays: 0,
       basePriceInKobo: 3800000, // ₦38,000
-      images: [
-        { url: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&q=80&w=800", isPrimary: true, altText: "The Milanese Pencil Skirt" },
-      ],
+      images: [],
       variants: [
         { name: "Black / UK 8", sku: "MIL-SK-BK-8", size: "UK 8", color: "Pitch Black", colorHex: "#0D0D0D", stockQuantity: 7, additionalPriceInKobo: 0 },
         { name: "Black / UK 10", sku: "MIL-SK-BK-10", size: "UK 10", color: "Pitch Black", colorHex: "#0D0D0D", stockQuantity: 9, additionalPriceInKobo: 0 },

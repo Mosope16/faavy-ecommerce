@@ -119,24 +119,36 @@ export default async function HomePage() {
             {/* Right Column: Visual Composition */}
             <div className="lg:col-span-5 relative">
               <FadeIn delay={0.15}>
-                <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden bg-[#F5F2EB] border border-[#E8E3D8] shadow-2xl">
-                  <Image
-                    src="/images/products/suit-double-breasted.jpg"
-                    alt="The Sovereign Double-Breasted Suit by FAAVY"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 500px"
-                    className="object-cover object-top"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                  <div className="absolute bottom-6 left-6 right-6 text-white">
+                <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden bg-[#161616] border border-[#C5A880]/30 shadow-2xl flex flex-col justify-between p-8 text-white">
+                  <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-4">
+                    <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-[#C5A880]">
+                      Atelier Oye-Ekiti
+                    </span>
+                    <span className="text-[10px] font-mono text-neutral-400">
+                      Nº 01 / 2026
+                    </span>
+                  </div>
+
+                  <div className="my-auto text-center space-y-3">
+                    <div className="mx-auto w-16 h-16 rounded-full border border-[#C5A880]/40 flex items-center justify-center">
+                      <span className="font-serif-luxury text-2xl text-[#C5A880] italic">F</span>
+                    </div>
+                    <h2 className="font-serif-luxury text-2xl sm:text-3xl font-light tracking-wide text-[#FAF8F5]">
+                      FAAVY
+                    </h2>
+                    <p className="text-[11px] uppercase tracking-[0.25em] text-[#C5A880] font-medium">
+                      Haute Corporate Sartorial
+                    </p>
+                  </div>
+
+                  <div className="border-t border-[#2A2A2A] pt-4">
                     <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-[#C5A880]">
                       Flagship Commission
                     </span>
                     <h3 className="font-serif-luxury text-xl font-normal text-white mt-1">
                       The Sovereign Double-Breasted
                     </h3>
-                    <p className="text-xs text-neutral-200 mt-1">
+                    <p className="text-xs text-neutral-300 mt-1">
                       Super 140s Wool • Hand-Canvassed Peak Lapels
                     </p>
                   </div>
@@ -173,19 +185,30 @@ export default async function HomePage() {
               <StaggerItem key={cat.id}>
                 <Link
                   href={`/category/${cat.slug}`}
-                  className="group relative block aspect-[3/4] overflow-hidden bg-[#1A1A1A] border border-[#E8E3D8]"
+                  className="group relative block aspect-[3/4] overflow-hidden bg-[#1A1A1A] border border-[#2A2A2A] p-6 flex flex-col justify-between"
                 >
-                  {cat.imageUrl && (
-                    <Image
-                      src={cat.imageUrl}
-                      alt={cat.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      className="object-cover opacity-85 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-95"
-                    />
+                  {cat.imageUrl ? (
+                    <>
+                      <Image
+                        src={cat.imageUrl}
+                        alt={cat.name}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover opacity-85 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-95"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    </>
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#1E1E1E] to-[#121212] group-hover:from-[#252525] group-hover:to-[#171717] transition-colors" />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5 text-white">
+                  {!cat.imageUrl && (
+                    <div className="relative z-10 text-right">
+                      <span className="font-serif-luxury text-3xl font-light text-[#C5A880]/30 group-hover:text-[#C5A880]/60 transition-colors">
+                        {String(cat.displayOrder || "").padStart(2, "0")}
+                      </span>
+                    </div>
+                  )}
+                  <div className="relative z-10 mt-auto text-white">
                     <h3 className="font-serif-luxury text-xl font-normal tracking-wide text-white group-hover:text-[#C5A880] transition-colors">
                       {cat.name}
                     </h3>
@@ -229,9 +252,9 @@ export default async function HomePage() {
               const primaryImg =
                 product.images.find((i) => i.isPrimary)?.url ||
                 product.images[0]?.url ||
-                "/images/products/suit-double-breasted.jpg";
+                null;
               const secondaryImg =
-                product.images[1]?.url || primaryImg;
+                product.images[1]?.url || null;
               const defaultVariant = product.variants[0];
 
               return (
@@ -298,14 +321,29 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="relative aspect-[4/3] overflow-hidden bg-[#1A1A1A] border border-[#2A2A2A]">
-              <Image
-                src="/images/editorial/hero-banner.jpg"
-                alt="FAAVY Boardroom Tailoring"
-                fill
-                sizes="(max-width: 1024px) 100vw, 600px"
-                className="object-cover"
-              />
+            <div className="relative aspect-[4/3] overflow-hidden bg-[#181818] border border-[#2A2A2A] p-8 flex flex-col justify-between">
+              <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-3 text-[10px] uppercase font-medium tracking-[0.25em] text-[#C5A880]">
+                <span>Bespoke Commissioning</span>
+                <span>Atelier Standards</span>
+              </div>
+              <div className="my-auto space-y-4">
+                <blockquote className="font-serif-luxury text-xl sm:text-2xl text-[#FAF8F5] leading-relaxed italic">
+                  &ldquo;Every seam must reflect authority, precision, and uncompromised dignity.&rdquo;
+                </blockquote>
+                <p className="text-xs text-neutral-400 font-light">
+                  Handcrafted in Oye-Ekiti for corporate leaders across the nation.
+                </p>
+              </div>
+              <div className="flex items-center gap-4 border-t border-[#2A2A2A] pt-4 text-xs text-neutral-400">
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#C5A880]" />
+                  <span>Individual Patterns</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#C5A880]" />
+                  <span>Super 140s Fabrics</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

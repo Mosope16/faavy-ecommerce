@@ -15,8 +15,8 @@ export interface ProductCardProps {
   slug: string;
   basePriceInKobo: number;
   categoryName: string;
-  imageUrl: string;
-  secondaryImageUrl?: string;
+  imageUrl?: string | null;
+  secondaryImageUrl?: string | null;
   isMadeToOrder: boolean;
   leadTimeDays?: number;
   variantsCount?: number;
@@ -64,7 +64,7 @@ export function ProductCard({
       variantName: defaultVariant.name,
       sku: defaultVariant.sku,
       priceInKobo: basePriceInKobo + defaultVariant.additionalPriceInKobo,
-      image: imageUrl,
+      image: imageUrl || "",
       maxStock: defaultVariant.stockQuantity,
       isMadeToOrder,
       leadTimeDays,
@@ -84,14 +84,28 @@ export function ProductCard({
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Product Image Frame */}
-      <Link href={`/product/${slug}`} className="relative aspect-[3/4] w-full overflow-hidden bg-[#F5F2EB]">
-        <Image
-          src={displayImage}
-          alt={name}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-        />
+      <Link href={`/product/${slug}`} className="relative aspect-[3/4] w-full overflow-hidden bg-[#F5F2EB] flex items-center justify-center">
+        {displayImage ? (
+          <Image
+            src={displayImage}
+            alt={name}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+          />
+        ) : (
+          <div className="h-full w-full flex flex-col items-center justify-center bg-gradient-to-br from-[#F5F2EB] to-[#ECE7DD] p-6 text-center select-none">
+            <div className="w-12 h-12 rounded-full border border-[#C5A880]/50 flex items-center justify-center mb-3 transition-transform duration-500 group-hover:scale-110">
+              <span className="font-serif-luxury text-xl text-[#8C6F45] italic">F</span>
+            </div>
+            <span className="text-[10px] uppercase font-semibold tracking-[0.25em] text-[#8C6F45]">
+              FAAVY
+            </span>
+            <span className="font-serif-luxury text-xs text-neutral-700 mt-1 line-clamp-1">
+              {name}
+            </span>
+          </div>
+        )}
 
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">

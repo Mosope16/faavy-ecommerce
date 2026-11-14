@@ -214,9 +214,9 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
               const primaryImg =
                 product.images.find((i) => i.isPrimary)?.url ||
                 product.images[0]?.url ||
-                "/images/products/suit-double-breasted.jpg";
+                null;
               const secondaryImg =
-                product.images[1]?.url || primaryImg;
+                product.images[1]?.url || null;
               const defaultVariant = product.variants[0];
 
               return (

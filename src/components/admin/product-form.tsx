@@ -354,7 +354,7 @@ export function ProductForm({ categories }: ProductFormProps) {
               required
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="/images/products/suit-double-breasted.jpg or HTTPS url"
+              placeholder="https://res.cloudinary.com/... or image URL"
               className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
             />
           </div>

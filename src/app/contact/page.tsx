@@ -50,7 +50,7 @@ export default function ContactPage() {
                   <Phone className="h-4 w-4 text-[#8C6F45] shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-[#1A1A1A]">Telephone</strong>
-                    <span>+234 814 000 0000</span>
+                    <span>+234 913 830 4922</span>
                   </div>
                 </div>
 
@@ -66,7 +66,7 @@ export default function ContactPage() {
               {/* Instant WhatsApp Action */}
               <div className="pt-2">
                 <a
-                  href={`https://wa.me/2348140000000?text=${encodeURIComponent(
+                  href={`https://wa.me/2349138304922?text=${encodeURIComponent(
                     "Hello FAAVY Concierge, I would like to make an enquiry regarding your bespoke tailoring."
                   )}`}
                   target="_blank"

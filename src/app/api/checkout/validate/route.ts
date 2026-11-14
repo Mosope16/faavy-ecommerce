@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
         unitPriceInKobo,
         quantity: item.quantity,
         totalInKobo: totalItemKobo,
-        imageUrl: product.images[0]?.url || "/images/products/suit-double-breasted.jpg",
+        imageUrl: product.images[0]?.url || "",
         isMadeToOrder: product.isMadeToOrder,
         leadTimeDays: product.leadTimeDays,
       });

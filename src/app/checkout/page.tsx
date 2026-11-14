@@ -430,13 +430,19 @@ export default function CheckoutPage() {
               <div className="divide-y divide-[#E8E3D8] max-h-72 overflow-y-auto pr-2">
                 {items.map((item) => (
                   <div key={item.variantId} className="flex gap-3 py-3">
-                    <div className="relative h-16 w-14 shrink-0 bg-[#F5F2EB] border border-[#E8E3D8] overflow-hidden">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                      />
+                    <div className="relative h-16 w-14 shrink-0 bg-[#F5F2EB] border border-[#E8E3D8] overflow-hidden flex items-center justify-center">
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-[#F5F2EB] to-[#E8E3D8]">
+                          <span className="font-serif-luxury text-xs text-[#8C6F45] italic">F</span>
+                        </div>
+                      )}
                     </div>
                     <div className="flex-1">
                       <h4 className="font-serif-luxury text-xs font-medium text-[#1A1A1A] line-clamp-1">

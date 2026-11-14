@@ -99,8 +99,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 const primaryImg =
                   rel.images.find((i) => i.isPrimary)?.url ||
                   rel.images[0]?.url ||
-                  "/images/products/suit-double-breasted.jpg";
-                const secondaryImg = rel.images[1]?.url || primaryImg;
+                  null;
+                const secondaryImg = rel.images[1]?.url || null;
                 const defaultVariant = rel.variants[0];
 
                 return (

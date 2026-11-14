@@ -71,20 +71,24 @@ export default async function AdminProductsPage() {
                     (sum, v) => sum + v.stockQuantity,
                     0
                   );
-                  const thumb =
-                    prod.images[0]?.url ||
-                    "/images/products/suit-double-breasted.jpg";
+                  const thumb = prod.images[0]?.url || null;
 
                   return (
                     <tr key={prod.id} className="hover:bg-[#1C1C1C]">
                       <td className="p-4 flex items-center gap-3">
-                        <div className="relative h-12 w-10 shrink-0 bg-[#222222] border border-[#333333] overflow-hidden">
-                          <Image
-                            src={thumb}
-                            alt={prod.name}
-                            fill
-                            className="object-cover"
-                          />
+                        <div className="relative h-12 w-10 shrink-0 bg-[#222222] border border-[#333333] overflow-hidden flex items-center justify-center">
+                          {thumb ? (
+                            <Image
+                              src={thumb}
+                              alt={prod.name}
+                              fill
+                              className="object-cover"
+                            />
+                          ) : (
+                            <span className="font-serif-luxury text-xs text-[#C5A880] italic">
+                              F
+                            </span>
+                          )}
                         </div>
                         <div>
                           <strong className="block text-white font-medium">
