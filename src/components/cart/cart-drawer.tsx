@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Minus, Trash2, ShoppingBag, MessageCircle, ArrowRight } from "lucide-react";
 import { useCart } from "@/context/cart-context";
@@ -20,6 +21,12 @@ export function CartDrawer() {
     subtotalInKobo,
     totalItemsCount,
   } = useCart();
+  const pathname = usePathname();
+
+  // Hide cart drawer on administrative routes
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   // Lock body scroll when cart drawer is open
   React.useEffect(() => {

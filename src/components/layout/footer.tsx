@@ -1,8 +1,18 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { MessageCircle, MapPin, Mail, Phone, ShieldCheck } from "lucide-react";
 
 export function Footer() {
+  const pathname = usePathname();
+
+  // Hide storefront footer on administrative routes (/admin, /admin/login, etc.)
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <footer className="border-t border-[#E8E3D8] bg-[#121212] text-[#FAF8F5]">
       {/* Top Value Banner */}

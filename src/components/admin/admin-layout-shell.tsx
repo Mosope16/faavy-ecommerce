@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -31,7 +32,12 @@ export function AdminLayoutShell({
   children,
 }: AdminLayoutShellProps) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const navSections = [
     {
@@ -208,129 +214,133 @@ export function AdminLayoutShell({
           </div>
         </header>
 
-        {/* Mobile Navigation Drawer (Luxury Back-Office Shell) */}
-        <AnimatePresence>
-          {isMobileNavOpen && (
-            <div className="fixed inset-0 z-50 md:hidden">
-              {/* Backdrop */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                onClick={() => setIsMobileNavOpen(false)}
-                className="absolute inset-0 bg-black/80 backdrop-blur-xs"
-                aria-hidden="true"
-              />
-
-              {/* Drawer Content */}
-              <motion.div
-                initial={{ x: "-100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "-100%" }}
-                transition={{ type: "tween", duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="relative flex flex-col h-full w-[88%] max-w-[340px] bg-[#121212] border-r border-[#262626] shadow-2xl z-10"
-              >
-                {/* Drawer Header */}
-                <div className="p-5 border-b border-[#262626] flex items-center justify-between bg-[#161616]">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-8 w-8 rounded-xs bg-[#1F1F1F] border border-[#333333] flex items-center justify-center text-[#C5A880]">
-                      <Shield className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <span className="font-serif-luxury text-sm font-semibold tracking-wider text-white block">
-                        FAAVY ADMIN
-                      </span>
-                      <span className="text-[9px] uppercase tracking-[0.2em] text-[#C5A880] block">
-                        Atelier Control
-                      </span>
-                    </div>
-                  </div>
-                  <button
+        {/* Mobile Navigation Drawer (Luxury Back-Office Shell via Portal) */}
+        {isMounted &&
+          createPortal(
+            <AnimatePresence>
+              {isMobileNavOpen && (
+                <div className="fixed inset-0 z-[9999] md:hidden flex">
+                  {/* Backdrop */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25 }}
                     onClick={() => setIsMobileNavOpen(false)}
-                    className="h-9 w-9 rounded-full bg-[#1F1F1F] border border-[#2E2E2E] hover:border-neutral-500 text-neutral-400 hover:text-white flex items-center justify-center transition-all min-h-[44px] min-w-[44px]"
-                    aria-label="Close navigation"
+                    className="fixed inset-0 bg-black/80 backdrop-blur-xs"
+                    aria-hidden="true"
+                  />
+
+                  {/* Drawer Content */}
+                  <motion.div
+                    initial={{ x: "-100%" }}
+                    animate={{ x: 0 }}
+                    exit={{ x: "-100%" }}
+                    transition={{ type: "tween", duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className="relative flex flex-col h-[100dvh] w-[88%] max-w-[340px] bg-[#121212] border-r border-[#262626] shadow-2xl z-10 overflow-hidden"
                   >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-
-                {/* User info on mobile */}
-                <div className="px-5 py-3 border-b border-[#262626] bg-[#0A0A0A] flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
-                    <span className="text-neutral-400 truncate text-[11px]">{adminEmail}</span>
-                  </div>
-                  <span className="text-[9px] uppercase tracking-wider text-emerald-400 font-mono shrink-0">
-                    Active
-                  </span>
-                </div>
-
-                {/* Categorized Navigation Links */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {navSections.map((section) => (
-                    <div key={section.title} className="space-y-1">
-                      <div className="px-2 py-1 text-[9px] uppercase tracking-[0.2em] font-semibold text-neutral-500">
-                        {section.title}
+                    {/* Drawer Header (Fixed at Top) */}
+                    <div className="p-5 border-b border-[#262626] flex items-center justify-between bg-[#161616] shrink-0">
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-8 w-8 rounded-xs bg-[#1F1F1F] border border-[#333333] flex items-center justify-center text-[#C5A880]">
+                          <Shield className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <span className="font-serif-luxury text-sm font-semibold tracking-wider text-white block">
+                            FAAVY ADMIN
+                          </span>
+                          <span className="text-[9px] uppercase tracking-[0.2em] text-[#C5A880] block">
+                            Atelier Control
+                          </span>
+                        </div>
                       </div>
-                      <nav className="space-y-1">
-                        {section.items.map((item) => {
-                          const Icon = item.icon;
-                          const isActive =
-                            item.href === "/admin"
-                              ? pathname === "/admin"
-                              : pathname.startsWith(item.href);
-                          return (
-                            <Link
-                              key={item.href}
-                              href={item.href}
-                              onClick={() => setIsMobileNavOpen(false)}
-                              className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xs transition-colors min-h-[44px] ${
-                                isActive
-                                  ? "bg-gradient-to-r from-[#C5A880]/20 via-[#C5A880]/10 to-transparent text-white font-semibold border-l-2 border-[#C5A880]"
-                                  : "text-neutral-400 hover:text-white hover:bg-[#1E1E1E]/60"
-                              }`}
-                            >
-                              <div className="flex items-center gap-3">
-                                <Icon
-                                  className={`h-4 w-4 ${
-                                    isActive ? "text-[#C5A880]" : "text-neutral-500"
-                                  }`}
-                                />
-                                <span>{item.label}</span>
-                              </div>
-                              {isActive && (
-                                <span className="h-1.5 w-1.5 rounded-full bg-[#C5A880]" />
-                              )}
-                            </Link>
-                          );
-                        })}
-                      </nav>
+                      <button
+                        onClick={() => setIsMobileNavOpen(false)}
+                        className="h-9 w-9 rounded-full bg-[#1F1F1F] border border-[#2E2E2E] hover:border-neutral-500 text-neutral-400 hover:text-white flex items-center justify-center transition-all min-h-[44px] min-w-[44px]"
+                        aria-label="Close navigation"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
                     </div>
-                  ))}
-                </div>
 
-                {/* Drawer Footer Actions */}
-                <div className="p-4 border-t border-[#262626] bg-[#0E0E0E] space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Link
-                      href="/"
-                      target="_blank"
-                      className="inline-flex items-center gap-2 text-xs text-neutral-400 hover:text-white transition-colors py-1"
-                    >
-                      <ExternalLink className="h-3.5 w-3.5 text-[#C5A880]" />
-                      <span>Live Storefront</span>
-                    </Link>
-                    <AdminLogoutButton />
-                  </div>
-                  <div className="text-[9px] uppercase tracking-widest text-neutral-600 text-center border-t border-[#1F1F1F] pt-2">
-                    Oye-Ekiti Node • NGN Kobo
-                  </div>
+                    {/* User info on mobile */}
+                    <div className="px-5 py-3 border-b border-[#262626] bg-[#0A0A0A] flex items-center justify-between text-xs shrink-0">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
+                        <span className="text-neutral-400 truncate text-[11px]">{adminEmail}</span>
+                      </div>
+                      <span className="text-[9px] uppercase tracking-wider text-emerald-400 font-mono shrink-0">
+                        Active
+                      </span>
+                    </div>
+
+                    {/* Categorized Navigation Links (Scrollable Middle Section) */}
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 overscroll-contain">
+                      {navSections.map((section) => (
+                        <div key={section.title} className="space-y-1">
+                          <div className="px-2 py-1 text-[9px] uppercase tracking-[0.2em] font-semibold text-neutral-500">
+                            {section.title}
+                          </div>
+                          <nav className="space-y-1">
+                            {section.items.map((item) => {
+                              const Icon = item.icon;
+                              const isActive =
+                                item.href === "/admin"
+                                  ? pathname === "/admin"
+                                  : pathname.startsWith(item.href);
+                              return (
+                                <Link
+                                  key={item.href}
+                                  href={item.href}
+                                  onClick={() => setIsMobileNavOpen(false)}
+                                  className={`flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-xs transition-colors min-h-[44px] ${
+                                    isActive
+                                      ? "bg-gradient-to-r from-[#C5A880]/20 via-[#C5A880]/10 to-transparent text-white font-semibold border-l-2 border-[#C5A880]"
+                                      : "text-neutral-400 hover:text-white hover:bg-[#1E1E1E]/60"
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <Icon
+                                      className={`h-4 w-4 ${
+                                        isActive ? "text-[#C5A880]" : "text-neutral-500"
+                                      }`}
+                                    />
+                                    <span>{item.label}</span>
+                                  </div>
+                                  {isActive && (
+                                    <span className="h-1.5 w-1.5 rounded-full bg-[#C5A880]" />
+                                  )}
+                                </Link>
+                              );
+                            })}
+                          </nav>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Drawer Footer Actions (Fixed at Bottom) */}
+                    <div className="p-4 border-t border-[#262626] bg-[#0E0E0E] space-y-3 shrink-0">
+                      <div className="flex items-center justify-between">
+                        <Link
+                          href="/"
+                          target="_blank"
+                          className="inline-flex items-center gap-2 text-xs text-neutral-400 hover:text-white transition-colors py-1"
+                        >
+                          <ExternalLink className="h-3.5 w-3.5 text-[#C5A880]" />
+                          <span>Live Storefront</span>
+                        </Link>
+                        <AdminLogoutButton />
+                      </div>
+                      <div className="text-[9px] uppercase tracking-widest text-neutral-600 text-center border-t border-[#1F1F1F] pt-2">
+                        Oye-Ekiti Node • NGN Kobo
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
-              </motion.div>
-            </div>
+              )}
+            </AnimatePresence>,
+            document.body
           )}
-        </AnimatePresence>
 
         {/* Child Pages */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0 overflow-y-auto">

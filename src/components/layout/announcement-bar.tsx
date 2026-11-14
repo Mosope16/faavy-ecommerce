@@ -1,6 +1,16 @@
+"use client";
+
 import React from "react";
+import { usePathname } from "next/navigation";
 
 export function AnnouncementBar() {
+  const pathname = usePathname();
+
+  // Hide announcement bar on administrative routes (/admin, /admin/login, etc.)
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <div className="bg-[#121212] px-3 sm:px-4 py-2 sm:py-2.5 text-center text-[10px] sm:text-[11px] font-medium tracking-wider sm:tracking-widest uppercase text-[#FAF8F5]/90 border-b border-[#2A2A2A]">
       <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 sm:gap-4 flex-wrap leading-tight">
