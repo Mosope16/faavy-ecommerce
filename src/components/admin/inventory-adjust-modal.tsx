@@ -23,6 +23,18 @@ export function InventoryAdjustModal({ variant }: { variant: VariantInfo }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  // Lock body scroll when modal is open
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -74,10 +86,10 @@ export function InventoryAdjustModal({ variant }: { variant: VariantInfo }) {
             onClick={() => setIsOpen(false)}
             className="fixed inset-0 bg-black/70 backdrop-blur-xs"
           />
-          <div className="relative z-10 w-full max-w-md bg-[#161616] border border-[#27272A] p-6 shadow-2xl text-white space-y-4">
+          <div className="relative z-10 w-full max-w-md max-h-[90vh] overflow-y-auto bg-[#161616] border border-[#27272A] p-5 sm:p-6 shadow-2xl text-white space-y-4">
             <div className="flex justify-between items-start border-b border-[#27272A] pb-3">
               <div>
-                <h3 className="font-serif-luxury text-lg font-medium text-white">
+                <h3 className="font-serif-luxury text-base sm:text-lg font-medium text-white">
                   Adjust Inventory
                 </h3>
                 <p className="text-xs text-neutral-400">
@@ -86,7 +98,8 @@ export function InventoryAdjustModal({ variant }: { variant: VariantInfo }) {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-neutral-500 hover:text-white"
+                className="p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-neutral-500 hover:text-white"
+                aria-label="Close modal"
               >
                 ✕
               </button>

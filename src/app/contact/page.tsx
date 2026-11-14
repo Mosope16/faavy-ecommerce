@@ -81,7 +81,7 @@ export default function ContactPage() {
           </div>
 
           {/* Right Contact Form */}
-          <div className="lg:col-span-7 bg-white border border-[#E8E3D8] p-6 sm:p-8">
+          <div className="lg:col-span-7 bg-white border border-[#E8E3D8] p-4 sm:p-8">
             <h3 className="font-serif-luxury text-xl font-medium text-[#1A1A1A] mb-2">
               Send an Atelier Enquiry
             </h3>
@@ -99,7 +99,7 @@ export default function ContactPage() {
                     type="text"
                     required
                     placeholder="e.g. Dr. Adesola Babatunde"
-                    className="w-full bg-[#FAF8F5] border border-[#E8E3D8] px-3.5 py-2.5 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                    className="w-full bg-[#FAF8F5] border border-[#E8E3D8] px-3.5 py-2.5 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden min-h-[42px]"
                   />
                 </div>
                 <div>
@@ -110,7 +110,7 @@ export default function ContactPage() {
                     type="tel"
                     required
                     placeholder="+234 800 000 0000"
-                    className="w-full bg-[#FAF8F5] border border-[#E8E3D8] px-3.5 py-2.5 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                    className="w-full bg-[#FAF8F5] border border-[#E8E3D8] px-3.5 py-2.5 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden min-h-[42px]"
                   />
                 </div>
               </div>
@@ -123,7 +123,7 @@ export default function ContactPage() {
                   type="email"
                   required
                   placeholder="babatunde@corporate.ng"
-                  className="w-full bg-[#FAF8F5] border border-[#E8E3D8] px-3.5 py-2.5 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                  className="w-full bg-[#FAF8F5] border border-[#E8E3D8] px-3.5 py-2.5 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden min-h-[42px]"
                 />
               </div>
 
@@ -131,7 +131,7 @@ export default function ContactPage() {
                 <label className="block text-xs font-medium uppercase tracking-wider text-[#1A1A1A] mb-1.5">
                   Subject / Nature of Commission
                 </label>
-                <select className="w-full bg-[#FAF8F5] border border-[#E8E3D8] px-3.5 py-2.5 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden">
+                <select className="w-full bg-[#FAF8F5] border border-[#E8E3D8] px-3.5 py-2.5 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden min-h-[42px]">
                   <option>Bespoke Suiting Commission</option>
                   <option>Executive Corporate Gown Inquiry</option>
                   <option>Fleet / Organization Corporate Attire</option>
@@ -148,13 +148,13 @@ export default function ContactPage() {
                   rows={5}
                   required
                   placeholder="Please describe your requirements, preferred fabrics, or specific delivery deadlines..."
-                  className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                  className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-[#1A1A1A] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-colors"
+                className="w-full bg-[#1A1A1A] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-colors min-h-[46px]"
               >
                 Submit Consultation Request
               </button>

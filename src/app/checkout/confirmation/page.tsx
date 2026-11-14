@@ -42,24 +42,24 @@ export default async function ConfirmationPage({ searchParams }: ConfirmationPag
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <FadeIn direction="up">
           {/* Header Card */}
-          <div className="bg-white border border-[#E8E3D8] p-8 sm:p-12 text-center shadow-lg space-y-4">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#E8F8EE] text-[#25D366]">
-              <CheckCircle2 className="h-10 w-10" />
+          <div className="bg-white border border-[#E8E3D8] p-5 sm:p-12 text-center shadow-lg space-y-4">
+            <div className="mx-auto flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-[#E8F8EE] text-[#25D366]">
+              <CheckCircle2 className="h-8 w-8 sm:h-10 sm:w-10" />
             </div>
 
             <span className="text-xs uppercase font-semibold tracking-[0.25em] text-[#8C6F45]">
               Commission Confirmed
             </span>
 
-            <h1 className="font-serif-luxury text-3xl sm:text-4xl font-normal text-[#1A1A1A]">
+            <h1 className="font-serif-luxury text-2xl sm:text-4xl font-normal text-[#1A1A1A]">
               Thank You for Dressing with FAAVY
             </h1>
 
-            <p className="text-sm text-neutral-600 max-w-md mx-auto font-light leading-relaxed">
-              Your order <strong className="text-[#1A1A1A] font-mono">{order.orderNumber}</strong> has been successfully received by our atelier in Oye-Ekiti.
+            <p className="text-xs sm:text-sm text-neutral-600 max-w-md mx-auto font-light leading-relaxed">
+              Your order <strong className="text-[#1A1A1A] font-mono break-all sm:break-normal">{order.orderNumber}</strong> has been successfully received by our atelier in Oye-Ekiti.
             </p>
 
-            <div className="pt-2 flex flex-wrap justify-center gap-4 text-xs text-neutral-500">
+            <div className="pt-2 flex flex-wrap justify-center gap-2 sm:gap-4 text-xs text-neutral-500">
               <span>Date: {formatDate(order.createdAt)}</span>
               <span>•</span>
               <span>

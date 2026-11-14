@@ -70,7 +70,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <div className="bg-[#FAF8F5] min-h-screen py-8 lg:py-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Navigation */}
-        <div className="mb-8 flex items-center gap-2 text-xs text-neutral-500 uppercase tracking-wider">
+        <div className="mb-6 sm:mb-8 flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs text-neutral-500 uppercase tracking-wider">
           <Link href="/" className="hover:text-[#1A1A1A]">
             Home
           </Link>
@@ -86,7 +86,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {product.category.name}
           </Link>
           <span>/</span>
-          <span className="text-[#1A1A1A] font-medium truncate max-w-xs">
+          <span className="text-[#1A1A1A] font-medium truncate max-w-[200px] sm:max-w-xs">
             {product.name}
           </span>
         </div>
@@ -109,7 +109,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </h2>
             </div>
 
-            <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <StaggerContainer className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
               {relatedProducts.map((rel) => {
                 const primaryImg =
                   rel.images.find((i) => i.isPrimary)?.url ||

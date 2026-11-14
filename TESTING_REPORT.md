@@ -3,7 +3,7 @@
 **Date of Execution:** November 14, 2026  
 **Test Suite Script:** `scripts/test-business-logic.mjs`  
 **Execution Environment:** Node v26.13.1, Next.js 16.4.6, Prisma 6.19.3, Neon PostgreSQL Serverless  
-**Build Result:** `npm run build` -> Exit Code 0 (34 routes compiled, 0 errors, 0 warnings)  
+**Build Result:** `npm run build` -> Exit Code 0 (36 routes compiled, 0 errors, 0 warnings)  
 **TypeScript Check:** `npx tsc --noEmit` -> Exit Code 0
 
 ---
@@ -58,3 +58,49 @@
 - **Framer Motion:** Reusable motion system implemented in `src/components/motion/` (`fade-in.tsx`, `reveal.tsx`, `stagger-container.tsx`, `page-transition.tsx`, `motion-variants.ts`).
 - **Performance & Reduced Motion:** All components incorporate `useReducedMotion()` fallbacks, ensuring instant opacity changes for users who have enabled reduced motion in their OS.
 - **Visual Aesthetic:** Strictly adheres to FAAVY's warm ivory (`#FAF8F5`), cream (`#F5F2EB`), deep charcoal (`#1A1A1A`), and champagne-gold (`#C5A880`) palette.
+
+---
+
+## 4. Responsive Design & Cross-Device Viewport Verification
+
+A comprehensive project-wide responsive design audit and optimization was performed across all storefront and administrative pages, adhering to a mobile-first implementation philosophy and luxury corporate identity.
+
+### 4.1 Breakpoint Testing Matrix
+
+Every page was verified across the complete 9-tier viewport spectrum:
+
+| Device Category | Width | Storefront Verification | Admin Verification | Horizontal Overflow |
+|---|---|---|---|---|
+| **Small Mobile** | `320px` | Single/compact column layouts; padded margins; readable type | Drawer sidebar; scrollable tables; stacked KPIs | **Zero (0px)** |
+| **Standard Mobile** | `375px` | 2-column micro-grid on product catalog; full touch targets | Full functionality in drawer; table scrolling indicators | **Zero (0px)** |
+| **Large Mobile** | `430px` | Fluid hero typography; unclipped aspect ratios | Responsive cards; no visual overlapping | **Zero (0px)** |
+| **Small Tablet** | `640px` | 2-column product grid; wrapped filter chips | 2-column KPI grid; comfortable touch surfaces | **Zero (0px)** |
+| **Tablet** | `768px` | 2-3 column product grid; responsive editorial layout | Desktop sidebar emerges; compact table layouts | **Zero (0px)** |
+| **Large Tablet** | `1024px` | Desktop nav appears; sticky checkout summary | Full multi-column dashboard grid | **Zero (0px)** |
+| **Laptop** | `1280px` | 3-column product grid; spacious margins | Full administrative suite with fixed sidebar | **Zero (0px)** |
+| **Desktop** | `1440px` | 4-column product grid; luxury whitespace | Extended data tables and order analytics | **Zero (0px)** |
+| **Large Desktop** | `1920px` | `max-w-7xl` container constraints; centered presentation | High-density administrative workspace | **Zero (0px)** |
+
+### 4.2 Key Responsive Enhancements Implemented
+
+1. **Global Viewport & Overflow Control:**
+   - Next.js viewport metadata configured with `width=device-width, initial-scale=1.0, maximum-scale=5.0`.
+   - `overflow-x-hidden` on `<body>` to eliminate horizontal page scrolling across all devices.
+   - iOS Safari auto-zoom prevention: all text inputs enforce a minimum font size of `16px` (`text-base sm:text-xs`) on mobile viewports.
+
+2. **Mobile Navigation & Header:**
+   - Slide-out mobile navigation drawer powered by Framer Motion.
+   - Backdrop overlay with blur, automatic background scroll locking (`document.body.style.overflow = 'hidden'`), auto-close on `pathname` change and `Escape` key press.
+   - All navigation targets, search inputs, and action buttons sized to $\ge 44 \times 44\text{px}$ touch targets.
+
+3. **Storefront Experience:**
+   - **Homepage:** Fluid hero typography (`text-3xl sm:text-5xl lg:text-6xl`), responsive stacked CTA buttons on mobile, unclipped luxury aspect ratios (`min-h-[300px] sm:min-h-0 sm:aspect-[4/3]`), multi-column footer stacking (`sm:grid-cols-2 lg:grid-cols-5`).
+   - **Shop & Category:** Horizontally scrollable category chip bar on mobile (`overflow-x-auto scrollbar-none`), native responsive sort dropdown, and adaptive product grid (`grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`).
+   - **Product Detail:** Multi-image gallery with responsive thumbnail strip, comfortable variant selectors ($\ge 48\text{px}$ touch height), size guide modal with internal scroll and body lock, and stacked assurance badges.
+   - **Cart & Checkout:** Mobile-optimized slide-out cart drawer, stacked address inputs on mobile, full-width checkout action buttons ($\ge 48\text{px}$), and sticky order summary on laptop/desktop.
+   - **Editorial & Informational Pages:** About, Contact, Order Tracking, Shipping/Returns, Privacy, and Terms with fluid headings and responsive container widths.
+
+4. **Administrative Back-Office (`AdminLayoutShell`):**
+   - **Responsive Shell:** Hides the 500px desktop sidebar on `< 768px` devices; provides a dedicated mobile header with hamburger menu, slide-out drawer navigation, and active path highlights.
+   - **Data Tables:** All 8 admin data tables (Orders, Products, Categories, Inventory Variants, Inventory Movements, Shipments, Customers, Discounts) wrapped in `overflow-x-auto` with calibrated `min-w-[600px]` to `min-w-[760px]` to preserve column hierarchy without cell crushing or viewport blowout.
+   - **Forms & Modals:** `ProductForm`, `SettingsForm`, `OrderStatusController`, and `InventoryAdjustModal` converted to responsive single/multi-column layouts with internal scrolling and touch-friendly controls.

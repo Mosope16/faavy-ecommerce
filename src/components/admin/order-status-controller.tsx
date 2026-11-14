@@ -78,8 +78,8 @@ export function OrderStatusController({
   )}`;
 
   return (
-    <div className="bg-[#161616] border border-[#27272A] p-6 space-y-6">
-      <h3 className="font-serif-luxury text-lg font-medium text-white border-b border-[#27272A] pb-3">
+    <div className="bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-6">
+      <h3 className="font-serif-luxury text-base sm:text-lg font-medium text-white border-b border-[#27272A] pb-3">
         Lifecycle & Fulfillment Control
       </h3>
 
@@ -105,7 +105,7 @@ export function OrderStatusController({
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+            className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden min-h-[44px]"
           >
             <option value="PENDING_PAYMENT">PENDING PAYMENT</option>
             <option value="CONFIRMED">CONFIRMED (PAID)</option>
@@ -127,7 +127,7 @@ export function OrderStatusController({
               value={carrierName}
               onChange={(e) => setCarrierName(e.target.value)}
               placeholder="e.g. FAAVY Direct or GIG Logistics"
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden min-h-[44px]"
             />
           </div>
 
@@ -140,7 +140,7 @@ export function OrderStatusController({
               value={trackingNumber}
               onChange={(e) => setTrackingNumber(e.target.value)}
               placeholder="e.g. FAV-TRK-20261114-1234"
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs font-mono text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs font-mono text-white focus:border-[#C5A880] focus:outline-hidden min-h-[44px]"
             />
           </div>
         </div>
@@ -149,7 +149,7 @@ export function OrderStatusController({
           <button
             type="submit"
             disabled={isUpdating}
-            className="flex-1 flex items-center justify-center gap-2 bg-[#FAF8F5] px-5 py-3 text-xs font-semibold uppercase tracking-wider text-[#0D0D0D] hover:bg-[#C5A880] transition-colors disabled:bg-neutral-600"
+            className="flex-1 flex items-center justify-center gap-2 bg-[#FAF8F5] px-5 py-3 text-xs font-semibold uppercase tracking-wider text-[#0D0D0D] hover:bg-[#C5A880] transition-colors disabled:bg-neutral-600 min-h-[44px]"
           >
             {isUpdating ? (
               <>
@@ -165,7 +165,7 @@ export function OrderStatusController({
             href={whatsappCustomerUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 border border-[#25D366] bg-transparent px-5 py-3 text-xs font-semibold uppercase tracking-wider text-[#25D366] hover:bg-[#25D366]/10 transition-colors"
+            className="flex items-center justify-center gap-2 border border-[#25D366] bg-transparent px-5 py-3 text-xs font-semibold uppercase tracking-wider text-[#25D366] hover:bg-[#25D366]/10 transition-colors min-h-[44px]"
           >
             <MessageCircle className="h-4 w-4" />
             <span>Notify Customer via WhatsApp</span>

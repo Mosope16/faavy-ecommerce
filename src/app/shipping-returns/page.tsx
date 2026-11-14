@@ -12,7 +12,7 @@ export default function ShippingReturnsPage() {
             <span className="text-xs uppercase font-semibold tracking-[0.25em] text-[#8C6F45]">
               Logistics Policy
             </span>
-            <h1 className="font-serif-luxury mt-2 text-4xl sm:text-5xl font-normal text-[#1A1A1A]">
+            <h1 className="font-serif-luxury mt-2 text-3xl sm:text-4xl lg:text-5xl font-normal text-[#1A1A1A]">
               Shipping, Delivery & Returns
             </h1>
             <p className="mt-3 text-sm text-neutral-600 font-light leading-relaxed">

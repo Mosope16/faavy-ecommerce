@@ -53,7 +53,7 @@ export default async function AdminInventoryPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full min-w-[650px] text-left text-xs">
             <thead>
               <tr className="border-b border-[#27272A] bg-[#1E1E1E] text-neutral-400 font-semibold uppercase tracking-wider text-[10px]">
                 <th className="p-4">Piece</th>
@@ -117,7 +117,7 @@ export default async function AdminInventoryPage() {
       </div>
 
       {/* 2. Immutable Inventory Movements Audit Log */}
-      <div className="bg-[#161616] border border-[#27272A] p-6 space-y-4">
+      <div className="bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-4">
         <div className="flex items-center justify-between border-b border-[#27272A] pb-4">
           <h2 className="font-serif-luxury text-base font-medium text-white flex items-center gap-2">
             <History className="h-4 w-4 text-[#C5A880]" />
@@ -131,7 +131,7 @@ export default async function AdminInventoryPage() {
           </p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+            <table className="w-full min-w-[650px] text-left text-xs">
               <thead>
                 <tr className="border-b border-[#27272A] text-neutral-500 uppercase tracking-wider text-[10px]">
                   <th className="pb-3">Timestamp</th>

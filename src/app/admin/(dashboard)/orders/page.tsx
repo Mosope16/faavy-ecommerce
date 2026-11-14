@@ -79,7 +79,7 @@ export default async function AdminOrdersPage({ searchParams }: OrdersPageProps)
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-[#262626] pb-4">
+      <div className="flex items-center gap-2 overflow-x-auto pb-3 sm:pb-4 sm:flex-wrap border-b border-[#262626] scrollbar-none -mx-1 px-1 sm:mx-0 sm:px-0">
         {statuses.map((st) => {
           const isSelected =
             st === "ALL" ? !statusFilter : statusFilter === st;
@@ -87,7 +87,7 @@ export default async function AdminOrdersPage({ searchParams }: OrdersPageProps)
             <Link
               key={st}
               href={st === "ALL" ? "/admin/orders" : `/admin/orders?status=${st}`}
-              className={`px-3 py-1 text-[11px] uppercase tracking-wider font-semibold rounded-xs transition-colors ${
+              className={`shrink-0 px-3 py-1.5 text-[11px] uppercase tracking-wider font-semibold rounded-xs transition-colors min-h-[36px] flex items-center ${
                 isSelected
                   ? "bg-[#C5A880] text-black"
                   : "bg-[#1A1A1A] text-neutral-400 hover:text-white border border-[#2B2B2B]"
@@ -107,7 +107,7 @@ export default async function AdminOrdersPage({ searchParams }: OrdersPageProps)
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+            <table className="w-full min-w-[760px] text-left text-xs">
               <thead>
                 <tr className="border-b border-[#27272A] bg-[#1E1E1E] text-neutral-400 font-semibold uppercase tracking-wider text-[10px]">
                   <th className="p-4">Order Number</th>

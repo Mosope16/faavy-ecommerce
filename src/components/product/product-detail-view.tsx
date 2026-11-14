@@ -71,6 +71,18 @@ export function ProductDetailView({
   const [justAdded, setJustAdded] = useState(false);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
 
+  // Lock body scroll when size guide modal is open
+  React.useEffect(() => {
+    if (isSizeGuideOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isSizeGuideOpen]);
+
   const activeVariant =
     product.variants.find((v) => v.id === selectedVariantId) ||
     product.variants[0];
@@ -245,7 +257,7 @@ export function ProductDetailView({
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2.5">
                 {product.variants.map((v) => {
                   const isSelected = v.id === selectedVariantId;
                   const isVarOutOfStock =
@@ -259,7 +271,7 @@ export function ProductDetailView({
                         setQuantity(1);
                       }}
                       disabled={isVarOutOfStock}
-                      className={`relative flex flex-col items-start p-3 text-left border transition-all ${
+                      className={`relative flex flex-col items-start p-2.5 sm:p-3 text-left border transition-all min-h-[48px] justify-center ${
                         isSelected
                           ? "border-[#1A1A1A] bg-[#1A1A1A] text-white"
                           : isVarOutOfStock
@@ -310,12 +322,12 @@ export function ProductDetailView({
             <div className="flex items-center border border-[#E8E3D8] bg-white">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="p-2 text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB]"
+                className="p-2.5 sm:p-3 min-w-[40px] min-h-[40px] flex items-center justify-center text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB]"
                 aria-label="Decrease quantity"
               >
                 <Minus className="h-3.5 w-3.5" />
               </button>
-              <span className="px-4 text-xs font-semibold">{quantity}</span>
+              <span className="px-4 text-xs font-semibold select-none">{quantity}</span>
               <button
                 onClick={() => {
                   const maxAllowed = product.isMadeToOrder
@@ -323,7 +335,7 @@ export function ProductDetailView({
                     : activeVariant?.stockQuantity || 1;
                   setQuantity(Math.min(maxAllowed, quantity + 1));
                 }}
-                className="p-2 text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB]"
+                className="p-2.5 sm:p-3 min-w-[40px] min-h-[40px] flex items-center justify-center text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB]"
                 aria-label="Increase quantity"
               >
                 <Plus className="h-3.5 w-3.5" />
@@ -336,7 +348,7 @@ export function ProductDetailView({
             <button
               onClick={handleAddToCart}
               disabled={isOutOfStock || justAdded}
-              className={`w-full flex items-center justify-center gap-2.5 px-6 py-4 text-xs font-semibold uppercase tracking-[0.2em] transition-all shadow-md ${
+              className={`w-full flex items-center justify-center gap-2.5 px-6 py-4 text-xs font-semibold uppercase tracking-[0.2em] transition-all shadow-md min-h-[48px] ${
                 isOutOfStock
                   ? "bg-neutral-300 text-neutral-500 cursor-not-allowed"
                   : justAdded
@@ -364,16 +376,16 @@ export function ProductDetailView({
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2.5 border border-[#25D366] bg-white px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#121212] hover:bg-[#E8F8EE] transition-colors"
+              className="w-full flex items-center justify-center gap-2.5 border border-[#25D366] bg-white px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#121212] hover:bg-[#E8F8EE] transition-colors min-h-[48px]"
             >
-              <MessageCircle className="h-4 w-4 text-[#25D366]" />
+              <MessageCircle className="h-4 w-4 text-[#25D366] shrink-0" />
               <span>Enquire & Order via WhatsApp</span>
             </a>
           </div>
 
           {/* Delivery & Assurance Pills */}
-          <div className="mt-8 border-t border-[#E8E3D8] pt-6 grid grid-cols-2 gap-4 text-xs text-neutral-600">
-            <div className="flex items-start gap-2.5">
+          <div className="mt-8 border-t border-[#E8E3D8] pt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs text-neutral-600">
+            <div className="flex items-start gap-2.5 bg-[#F5F2EB]/50 sm:bg-transparent p-3 sm:p-0 border border-[#E8E3D8]/50 sm:border-0">
               <Truck className="h-4 w-4 text-[#8C6F45] shrink-0 mt-0.5" />
               <div>
                 <strong className="block text-[#1A1A1A]">
@@ -382,7 +394,7 @@ export function ProductDetailView({
                 <span>Direct delivery from Oye-Ekiti across Nigeria</span>
               </div>
             </div>
-            <div className="flex items-start gap-2.5">
+            <div className="flex items-start gap-2.5 bg-[#F5F2EB]/50 sm:bg-transparent p-3 sm:p-0 border border-[#E8E3D8]/50 sm:border-0">
               <ShieldCheck className="h-4 w-4 text-[#8C6F45] shrink-0 mt-0.5" />
               <div>
                 <strong className="block text-[#1A1A1A]">
@@ -435,7 +447,7 @@ export function ProductDetailView({
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative z-10 w-full max-w-lg bg-[#FAF8F5] p-6 sm:p-8 border border-[#E8E3D8] shadow-2xl"
+              className="relative z-10 w-full max-w-lg max-h-[85vh] overflow-y-auto bg-[#FAF8F5] p-5 sm:p-8 border border-[#E8E3D8] shadow-2xl"
             >
               <div className="flex justify-between items-start border-b border-[#E8E3D8] pb-4">
                 <h3 className="font-serif-luxury text-xl font-medium text-[#1A1A1A]">
@@ -443,7 +455,8 @@ export function ProductDetailView({
                 </h3>
                 <button
                   onClick={() => setIsSizeGuideOpen(false)}
-                  className="text-neutral-500 hover:text-[#1A1A1A]"
+                  className="p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-neutral-500 hover:text-[#1A1A1A]"
+                  aria-label="Close size guide"
                 >
                   ✕
                 </button>
@@ -454,42 +467,44 @@ export function ProductDetailView({
                   All FAAVY suits, gowns, and shirts follow British / European tailoring specifications with adjustments for Nigerian executive proportions.
                 </p>
 
-                <table className="w-full text-left border-collapse border border-[#E8E3D8]">
-                  <thead>
-                    <tr className="bg-[#F5F2EB] text-[#1A1A1A]">
-                      <th className="p-2 border border-[#E8E3D8]">Size</th>
-                      <th className="p-2 border border-[#E8E3D8]">Chest (in)</th>
-                      <th className="p-2 border border-[#E8E3D8]">Waist (in)</th>
-                      <th className="p-2 border border-[#E8E3D8]">Hip (in)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="p-2 border border-[#E8E3D8]">UK 8 / 38R</td>
-                      <td className="p-2 border border-[#E8E3D8]">34 - 36</td>
-                      <td className="p-2 border border-[#E8E3D8]">28 - 30</td>
-                      <td className="p-2 border border-[#E8E3D8]">36 - 38</td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 border border-[#E8E3D8]">UK 10 / 40R</td>
-                      <td className="p-2 border border-[#E8E3D8]">38 - 40</td>
-                      <td className="p-2 border border-[#E8E3D8]">32 - 34</td>
-                      <td className="p-2 border border-[#E8E3D8]">40 - 42</td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 border border-[#E8E3D8]">UK 12 / 42R</td>
-                      <td className="p-2 border border-[#E8E3D8]">42 - 44</td>
-                      <td className="p-2 border border-[#E8E3D8]">36 - 38</td>
-                      <td className="p-2 border border-[#E8E3D8]">44 - 46</td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 border border-[#E8E3D8]">UK 14 / 44R</td>
-                      <td className="p-2 border border-[#E8E3D8]">44 - 46</td>
-                      <td className="p-2 border border-[#E8E3D8]">38 - 40</td>
-                      <td className="p-2 border border-[#E8E3D8]">46 - 48</td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="overflow-x-auto -mx-1 px-1">
+                  <table className="w-full min-w-[320px] text-left border-collapse border border-[#E8E3D8]">
+                    <thead>
+                      <tr className="bg-[#F5F2EB] text-[#1A1A1A]">
+                        <th className="p-2 border border-[#E8E3D8]">Size</th>
+                        <th className="p-2 border border-[#E8E3D8]">Chest (in)</th>
+                        <th className="p-2 border border-[#E8E3D8]">Waist (in)</th>
+                        <th className="p-2 border border-[#E8E3D8]">Hip (in)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="p-2 border border-[#E8E3D8]">UK 8 / 38R</td>
+                        <td className="p-2 border border-[#E8E3D8]">34 - 36</td>
+                        <td className="p-2 border border-[#E8E3D8]">28 - 30</td>
+                        <td className="p-2 border border-[#E8E3D8]">36 - 38</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 border border-[#E8E3D8]">UK 10 / 40R</td>
+                        <td className="p-2 border border-[#E8E3D8]">38 - 40</td>
+                        <td className="p-2 border border-[#E8E3D8]">32 - 34</td>
+                        <td className="p-2 border border-[#E8E3D8]">40 - 42</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 border border-[#E8E3D8]">UK 12 / 42R</td>
+                        <td className="p-2 border border-[#E8E3D8]">42 - 44</td>
+                        <td className="p-2 border border-[#E8E3D8]">36 - 38</td>
+                        <td className="p-2 border border-[#E8E3D8]">44 - 46</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2 border border-[#E8E3D8]">UK 14 / 44R</td>
+                        <td className="p-2 border border-[#E8E3D8]">44 - 46</td>
+                        <td className="p-2 border border-[#E8E3D8]">38 - 40</td>
+                        <td className="p-2 border border-[#E8E3D8]">46 - 48</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
 
                 <div className="bg-[#F5F2EB] p-3 border border-[#E8E3D8] text-[11px] text-[#8C6F45]">
                   Need bespoke measurements taken? Our WhatsApp Concierge can guide you through exact tailor measurements.

@@ -40,8 +40,8 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="bg-[#0D0D0D] min-h-screen flex items-center justify-center px-4 text-white">
-      <div className="w-full max-w-md bg-[#161616] border border-[#27272A] p-8 sm:p-10 shadow-2xl space-y-6">
+    <div className="bg-[#0D0D0D] min-h-screen flex items-center justify-center px-4 py-8 text-white">
+      <div className="w-full max-w-md bg-[#161616] border border-[#27272A] p-6 sm:p-10 shadow-2xl space-y-6">
         <div className="text-center space-y-2">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#202020] border border-[#333333] text-[#C5A880]">
             <Shield className="h-6 w-6" />
@@ -77,7 +77,7 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="staff@faavy.ng"
-                className="w-full bg-[#1F1F1F] border border-[#333333] pl-10 pr-4 py-3 text-xs text-white placeholder-neutral-500 focus:border-[#C5A880] focus:outline-hidden"
+                className="w-full bg-[#1F1F1F] border border-[#333333] pl-10 pr-4 py-3 text-base sm:text-xs text-white placeholder-neutral-500 focus:border-[#C5A880] focus:outline-hidden min-h-[44px]"
               />
             </div>
           </div>
@@ -94,7 +94,7 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full bg-[#1F1F1F] border border-[#333333] pl-10 pr-4 py-3 text-xs text-white placeholder-neutral-500 focus:border-[#C5A880] focus:outline-hidden"
+                className="w-full bg-[#1F1F1F] border border-[#333333] pl-10 pr-4 py-3 text-base sm:text-xs text-white placeholder-neutral-500 focus:border-[#C5A880] focus:outline-hidden min-h-[44px]"
               />
             </div>
           </div>
@@ -103,7 +103,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 bg-[#FAF8F5] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#0D0D0D] hover:bg-[#C5A880] hover:text-[#0D0D0D] transition-colors shadow-md disabled:bg-neutral-600"
+              className="w-full flex items-center justify-center gap-2 bg-[#FAF8F5] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#0D0D0D] hover:bg-[#C5A880] hover:text-[#0D0D0D] transition-colors shadow-md disabled:bg-neutral-600 min-h-[46px]"
             >
               {isLoading ? (
                 <>
@@ -120,7 +120,7 @@ export default function AdminLoginPage() {
         <div className="text-center pt-4 border-t border-[#27272A]">
           <Link
             href="/"
-            className="text-[11px] text-neutral-500 hover:text-[#C5A880] transition-colors"
+            className="text-[11px] text-neutral-500 hover:text-[#C5A880] transition-colors inline-block py-1"
           >
             ← Return to Public Storefront
           </Link>

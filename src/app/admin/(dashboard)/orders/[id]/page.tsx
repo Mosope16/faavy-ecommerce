@@ -84,7 +84,7 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
       {/* Details Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Customer Information */}
-        <div className="bg-[#161616] border border-[#27272A] p-6 space-y-4">
+        <div className="bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-4">
           <h3 className="font-serif-luxury text-base font-medium text-white border-b border-[#27272A] pb-3 flex items-center gap-2">
             <User className="h-4 w-4 text-[#C5A880]" />
             <span>Client Profile</span>
@@ -112,7 +112,7 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
         </div>
 
         {/* Shipping Address */}
-        <div className="bg-[#161616] border border-[#27272A] p-6 space-y-4">
+        <div className="bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-4">
           <h3 className="font-serif-luxury text-base font-medium text-white border-b border-[#27272A] pb-3 flex items-center gap-2">
             <MapPin className="h-4 w-4 text-[#C5A880]" />
             <span>Delivery Destination</span>
@@ -143,14 +143,14 @@ export default async function AdminOrderDetailPage({ params }: OrderDetailPagePr
       </div>
 
       {/* Items Table Snapshot */}
-      <div className="bg-[#161616] border border-[#27272A] p-6 space-y-4">
+      <div className="bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-4">
         <h3 className="font-serif-luxury text-base font-medium text-white border-b border-[#27272A] pb-3 flex items-center gap-2">
           <Package className="h-4 w-4 text-[#C5A880]" />
           <span>Commission Items Snapshot ({order.items.length})</span>
         </h3>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full min-w-[500px] text-left text-xs">
             <thead>
               <tr className="border-b border-[#27272A] text-neutral-500 uppercase tracking-wider text-[10px]">
                 <th className="pb-3">Product Description</th>

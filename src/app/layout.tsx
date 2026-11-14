@@ -1,10 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { CartProvider } from "@/context/cart-context";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#FAF8F5",
+};
 
 export const metadata: Metadata = {
   title: "FAAVY | Luxury Nigerian Corporate Fashion House",
@@ -42,7 +48,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#1A1A1A]">
+      <body className="min-h-screen flex flex-col bg-[#FAF8F5] text-[#1A1A1A] antialiased overflow-x-hidden selection:bg-[#C5A880]/30 selection:text-[#1A1A1A]">
         <CartProvider>
           <AnnouncementBar />
           <Header />

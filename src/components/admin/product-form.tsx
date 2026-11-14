@@ -178,7 +178,7 @@ export function ProductForm({ categories }: ProductFormProps) {
       )}
 
       {/* 1. Core Garment Identity */}
-      <div className="bg-[#161616] border border-[#27272A] p-6 space-y-4">
+      <div className="bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-4">
         <h3 className="font-serif-luxury text-base font-medium text-white border-b border-[#27272A] pb-3">
           1. Garment Identity & Classification
         </h3>
@@ -194,7 +194,7 @@ export function ProductForm({ categories }: ProductFormProps) {
               value={name}
               onChange={(e) => handleNameChange(e.target.value)}
               placeholder="e.g. The Sovereign Peak Lapel Blazer"
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
             />
           </div>
 
@@ -208,7 +208,7 @@ export function ProductForm({ categories }: ProductFormProps) {
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
               placeholder="e.g. sovereign-peak-lapel-blazer"
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs font-mono text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs font-mono text-white focus:border-[#C5A880] focus:outline-hidden"
             />
           </div>
         </div>
@@ -221,7 +221,7 @@ export function ProductForm({ categories }: ProductFormProps) {
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden min-h-[44px]"
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -242,7 +242,7 @@ export function ProductForm({ categories }: ProductFormProps) {
               value={basePriceNaira}
               onChange={(e) => setBasePriceNaira(e.target.value)}
               placeholder="e.g. 85000"
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
             />
           </div>
         </div>
@@ -257,7 +257,7 @@ export function ProductForm({ categories }: ProductFormProps) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="High-fashion narrative describing the piece's cut, silhouette, and authority..."
-            className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+            className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
           />
         </div>
 
@@ -271,7 +271,7 @@ export function ProductForm({ categories }: ProductFormProps) {
               value={details}
               onChange={(e) => setDetails(e.target.value)}
               placeholder="e.g. Super 140s wool, hand-stitched pick stitching, horn buttons..."
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
             />
           </div>
 
@@ -284,14 +284,14 @@ export function ProductForm({ categories }: ProductFormProps) {
               value={careInstructions}
               onChange={(e) => setCareInstructions(e.target.value)}
               placeholder="e.g. Specialist dry clean only. Steam gently..."
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
             />
           </div>
         </div>
       </div>
 
       {/* 2. Made to Order & Featured Parameters */}
-      <div className="bg-[#161616] border border-[#27272A] p-6 space-y-4">
+      <div className="bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-4">
         <h3 className="font-serif-luxury text-base font-medium text-white border-b border-[#27272A] pb-3">
           2. Tailoring Modes & Visibility
         </h3>
@@ -339,7 +339,7 @@ export function ProductForm({ categories }: ProductFormProps) {
       </div>
 
       {/* 3. Imagery Assets */}
-      <div className="bg-[#161616] border border-[#27272A] p-6 space-y-4">
+      <div className="bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-4">
         <h3 className="font-serif-luxury text-base font-medium text-white border-b border-[#27272A] pb-3">
           3. Imagery Assets
         </h3>
@@ -355,7 +355,7 @@ export function ProductForm({ categories }: ProductFormProps) {
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="https://res.cloudinary.com/... or image URL"
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
             />
           </div>
 
@@ -368,14 +368,14 @@ export function ProductForm({ categories }: ProductFormProps) {
               value={secondaryImageUrl}
               onChange={(e) => setSecondaryImageUrl(e.target.value)}
               placeholder="Optional secondary detail angle"
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
             />
           </div>
         </div>
       </div>
 
       {/* 4. Variants Matrix */}
-      <div className="bg-[#161616] border border-[#27272A] p-6 space-y-4">
+      <div className="bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-4">
         <div className="flex items-center justify-between border-b border-[#27272A] pb-3">
           <h3 className="font-serif-luxury text-base font-medium text-white">
             4. Variants & Stock Allocation Matrix ({variants.length})
@@ -408,7 +408,7 @@ export function ProductForm({ categories }: ProductFormProps) {
                     updateVariantRow(idx, "name", e.target.value)
                   }
                   placeholder="e.g. Charcoal / 40R"
-                  className="w-full bg-[#161616] border border-[#333333] p-2 text-xs text-white"
+                  className="w-full bg-[#161616] border border-[#333333] p-2 text-base sm:text-xs text-white"
                 />
               </div>
 
@@ -421,7 +421,7 @@ export function ProductForm({ categories }: ProductFormProps) {
                   value={v.sku}
                   onChange={(e) => updateVariantRow(idx, "sku", e.target.value)}
                   placeholder="Auto-generated if blank"
-                  className="w-full bg-[#161616] border border-[#333333] p-2 text-xs font-mono text-white"
+                  className="w-full bg-[#161616] border border-[#333333] p-2 text-base sm:text-xs font-mono text-white"
                 />
               </div>
 
@@ -434,7 +434,7 @@ export function ProductForm({ categories }: ProductFormProps) {
                   value={v.size}
                   onChange={(e) => updateVariantRow(idx, "size", e.target.value)}
                   placeholder="40R / M"
-                  className="w-full bg-[#161616] border border-[#333333] p-2 text-xs text-white"
+                  className="w-full bg-[#161616] border border-[#333333] p-2 text-base sm:text-xs text-white"
                 />
               </div>
 
@@ -453,7 +453,7 @@ export function ProductForm({ categories }: ProductFormProps) {
                       parseInt(e.target.value, 10) || 0
                     )
                   }
-                  className="w-full bg-[#161616] border border-[#333333] p-2 text-xs text-white"
+                  className="w-full bg-[#161616] border border-[#333333] p-2 text-base sm:text-xs text-white"
                 />
               </div>
 
@@ -473,7 +473,7 @@ export function ProductForm({ categories }: ProductFormProps) {
                     )
                   }
                   placeholder="0"
-                  className="w-full bg-[#161616] border border-[#333333] p-2 text-xs text-white"
+                  className="w-full bg-[#161616] border border-[#333333] p-2 text-base sm:text-xs text-white"
                 />
               </div>
 

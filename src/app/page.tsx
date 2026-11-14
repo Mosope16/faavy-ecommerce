@@ -70,7 +70,7 @@ export default async function HomePage() {
               </FadeIn>
 
               <Reveal duration={0.85}>
-                <h1 className="font-serif-luxury text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#1A1A1A] leading-[1.12]">
+                <h1 className="font-serif-luxury text-3xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#1A1A1A] leading-[1.15]">
                   Dignity in Tailoring. <br />
                   <span className="italic font-light text-[#8C6F45]">
                     Authority in Presence.
@@ -85,10 +85,10 @@ export default async function HomePage() {
               </FadeIn>
 
               <FadeIn delay={0.3} direction="up">
-                <div className="pt-2 flex flex-wrap items-center gap-4">
+                <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
                   <Link
                     href="/shop"
-                    className="inline-flex items-center gap-2.5 bg-[#1A1A1A] px-7 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-all shadow-md group"
+                    className="inline-flex items-center justify-center gap-2.5 bg-[#1A1A1A] px-6 sm:px-7 py-3.5 sm:py-4 text-xs font-semibold uppercase tracking-[0.18em] sm:tracking-[0.2em] text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-all shadow-md group min-h-[44px]"
                   >
                     <span>Explore The Edit</span>
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -96,7 +96,7 @@ export default async function HomePage() {
 
                   <Link
                     href="/shop?madeToOrder=true"
-                    className="inline-flex items-center gap-2 border border-[#1A1A1A] bg-transparent px-7 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white transition-all"
+                    className="inline-flex items-center justify-center gap-2 border border-[#1A1A1A] bg-transparent px-6 sm:px-7 py-3.5 sm:py-4 text-xs font-semibold uppercase tracking-[0.18em] sm:tracking-[0.2em] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white transition-all min-h-[44px]"
                   >
                     <Scissors className="h-4 w-4 text-[#C5A880]" />
                     <span>Bespoke Service</span>
@@ -106,30 +106,30 @@ export default async function HomePage() {
 
               {/* Origin badge */}
               <FadeIn delay={0.4} direction="up">
-                <div className="pt-6 border-t border-[#E8E3D8] flex items-center gap-6 text-xs text-neutral-500">
+                <div className="pt-6 border-t border-[#E8E3D8] flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-start gap-4 sm:gap-6 text-xs text-neutral-500">
                   <div>
-                    <span className="block font-serif-luxury text-lg font-semibold text-[#1A1A1A]">
+                    <span className="block font-serif-luxury text-base sm:text-lg font-semibold text-[#1A1A1A]">
                       100%
                     </span>
-                    <span className="uppercase tracking-wider text-[10px]">
+                    <span className="uppercase tracking-wider text-[9px] sm:text-[10px]">
                       Single-Vendor Integrity
                     </span>
                   </div>
-                  <div className="h-8 w-px bg-[#E8E3D8]" />
+                  <div className="hidden sm:block h-8 w-px bg-[#E8E3D8]" />
                   <div>
-                    <span className="block font-serif-luxury text-lg font-semibold text-[#1A1A1A]">
+                    <span className="block font-serif-luxury text-base sm:text-lg font-semibold text-[#1A1A1A]">
                       Oye-Ekiti
                     </span>
-                    <span className="uppercase tracking-wider text-[10px]">
+                    <span className="uppercase tracking-wider text-[9px] sm:text-[10px]">
                       Atelier Location
                     </span>
                   </div>
-                  <div className="h-8 w-px bg-[#E8E3D8]" />
+                  <div className="hidden sm:block h-8 w-px bg-[#E8E3D8]" />
                   <div>
-                    <span className="block font-serif-luxury text-lg font-semibold text-[#1A1A1A]">
+                    <span className="block font-serif-luxury text-base sm:text-lg font-semibold text-[#1A1A1A]">
                       NGN (₦)
                     </span>
-                    <span className="uppercase tracking-wider text-[10px]">
+                    <span className="uppercase tracking-wider text-[9px] sm:text-[10px]">
                       Direct Pricing
                     </span>
                   </div>
@@ -140,7 +140,7 @@ export default async function HomePage() {
             {/* Right Column: Visual Composition */}
             <div className="lg:col-span-5 relative">
               <FadeIn delay={0.15}>
-                <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden bg-[#161616] border border-[#C5A880]/30 shadow-2xl flex flex-col justify-between p-8 text-white">
+                <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden bg-[#161616] border border-[#C5A880]/30 shadow-2xl flex flex-col justify-between p-5 sm:p-8 text-white">
                   <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-4">
                     <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-[#C5A880]">
                       Atelier Oye-Ekiti
@@ -201,12 +201,12 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {categories.map((cat) => (
               <StaggerItem key={cat.id}>
                 <Link
                   href={`/category/${cat.slug}`}
-                  className="group relative block aspect-[3/4] overflow-hidden bg-[#1A1A1A] border border-[#2A2A2A] p-6 flex flex-col justify-between"
+                  className="group relative block aspect-[4/3] sm:aspect-[3/4] overflow-hidden bg-[#1A1A1A] border border-[#2A2A2A] p-5 sm:p-6 flex flex-col justify-between"
                 >
                   {cat.imageUrl ? (
                     <>
@@ -268,7 +268,7 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {featuredProducts.map((product) => {
               const primaryImg =
                 product.images.find((i) => i.isPrimary)?.url ||
@@ -342,7 +342,7 @@ export default async function HomePage() {
               </div>
             </div>
 
-            <div className="relative aspect-[4/3] overflow-hidden bg-[#181818] border border-[#2A2A2A] p-8 flex flex-col justify-between">
+            <div className="relative aspect-auto min-h-[300px] sm:min-h-0 sm:aspect-[4/3] overflow-hidden bg-[#181818] border border-[#2A2A2A] p-6 sm:p-8 flex flex-col justify-between">
               <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-3 text-[10px] uppercase font-medium tracking-[0.25em] text-[#C5A880]">
                 <span>Bespoke Commissioning</span>
                 <span>Atelier Standards</span>
@@ -389,9 +389,9 @@ export default async function HomePage() {
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 bg-[#1A1A1A] px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-colors"
+              className="inline-flex items-center justify-center gap-2.5 bg-[#1A1A1A] px-6 sm:px-8 py-3.5 sm:py-4 text-xs font-semibold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-colors w-full sm:w-auto min-h-[44px]"
             >
-              <MessageCircle className="h-4 w-4 text-[#25D366]" />
+              <MessageCircle className="h-4 w-4 text-[#25D366] shrink-0" />
               <span>Initiate WhatsApp Consultation</span>
             </a>
           </div>

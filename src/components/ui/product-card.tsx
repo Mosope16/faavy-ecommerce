@@ -108,34 +108,34 @@ export function ProductCard({
         )}
 
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+        <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex flex-col gap-1 z-10 max-w-[85%]">
           {isMadeToOrder ? (
-            <span className="bg-[#121212]/90 backdrop-blur-xs px-2.5 py-1 text-[10px] uppercase font-medium tracking-wider text-[#C5A880] border border-[#C5A880]/30">
+            <span className="bg-[#121212]/90 backdrop-blur-xs px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] uppercase font-medium tracking-wider text-[#C5A880] border border-[#C5A880]/30 truncate">
               Made to Order ({leadTimeDays || 7}d)
             </span>
           ) : (
-            <span className="bg-[#FAF8F5]/90 backdrop-blur-xs px-2.5 py-1 text-[10px] uppercase font-medium tracking-wider text-neutral-800 border border-[#E8E3D8]">
+            <span className="bg-[#FAF8F5]/90 backdrop-blur-xs px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] uppercase font-medium tracking-wider text-neutral-800 border border-[#E8E3D8] truncate">
               Ready to Wear
             </span>
           )}
         </div>
 
-        {/* Quick Add Button Overlay */}
-        <div className="absolute inset-x-3 bottom-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* Quick Add Button Overlay (Desktop hover + mobile accessible) */}
+        <div className="absolute inset-x-2 sm:inset-x-3 bottom-2 sm:bottom-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
             onClick={handleQuickAdd}
             disabled={justAdded}
-            className="w-full flex items-center justify-center gap-2 bg-[#121212]/95 backdrop-blur-sm px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-colors shadow-lg"
+            className="w-full flex items-center justify-center gap-1.5 sm:gap-2 bg-[#121212]/95 backdrop-blur-sm px-3 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-colors shadow-lg min-h-[36px]"
           >
             {justAdded ? (
               <>
-                <Check className="h-4 w-4 text-[#25D366]" />
-                <span>Added to Bag</span>
+                <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#25D366]" />
+                <span className="truncate">Added</span>
               </>
             ) : (
               <>
-                <ShoppingBag className="h-4 w-4" />
-                <span>Quick Add</span>
+                <ShoppingBag className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="truncate">Quick Add</span>
               </>
             )}
           </button>
@@ -143,22 +143,22 @@ export function ProductCard({
       </Link>
 
       {/* Product Details */}
-      <div className="p-4 flex flex-col flex-1 justify-between">
+      <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between">
         <div>
-          <span className="text-[10px] uppercase tracking-widest text-[#8C6F45] font-semibold">
+          <span className="text-[9px] sm:text-[10px] uppercase tracking-widest text-[#8C6F45] font-semibold block">
             {categoryName}
           </span>
-          <h3 className="font-serif-luxury mt-1 text-sm font-medium text-[#1A1A1A] line-clamp-1 group-hover:text-[#8C6F45] transition-colors">
+          <h3 className="font-serif-luxury mt-1 text-xs sm:text-sm font-medium text-[#1A1A1A] line-clamp-1 group-hover:text-[#8C6F45] transition-colors">
             <Link href={`/product/${slug}`}>{name}</Link>
           </h3>
         </div>
 
-        <div className="mt-3 flex items-center justify-between border-t border-[#E8E3D8]/60 pt-3">
-          <span className="font-serif-luxury text-base font-semibold text-[#1A1A1A]">
+        <div className="mt-2.5 sm:mt-3 flex items-center justify-between border-t border-[#E8E3D8]/60 pt-2.5 sm:pt-3 gap-1">
+          <span className="font-serif-luxury text-sm sm:text-base font-semibold text-[#1A1A1A]">
             {formatNaira(basePriceInKobo)}
           </span>
-          <span className="text-[11px] uppercase tracking-wider text-neutral-500 hover:text-[#1A1A1A]">
-            View Piece →
+          <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-neutral-500 hover:text-[#1A1A1A] shrink-0">
+            View →
           </span>
         </div>
       </div>

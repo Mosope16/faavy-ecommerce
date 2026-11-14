@@ -145,9 +145,9 @@ export default async function AdminOverviewPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Recent Orders Table */}
-        <div className="lg:col-span-8 bg-[#161616] border border-[#27272A] p-6 space-y-4">
+        <div className="lg:col-span-8 bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-4">
           <div className="flex items-center justify-between border-b border-[#27272A] pb-4">
-            <h2 className="font-serif-luxury text-lg font-medium text-white">
+            <h2 className="font-serif-luxury text-base sm:text-lg font-medium text-white">
               Recent Order Commissions
             </h2>
             <Link
@@ -164,8 +164,8 @@ export default async function AdminOverviewPage() {
               No orders have been submitted yet. Store is ready for incoming commissions.
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+            <div className="overflow-x-auto -mx-1 px-1">
+              <table className="w-full min-w-[640px] text-left text-xs">
                 <thead>
                   <tr className="border-b border-[#27272A] text-neutral-400 font-semibold uppercase tracking-wider text-[10px]">
                     <th className="pb-3">Order Number</th>

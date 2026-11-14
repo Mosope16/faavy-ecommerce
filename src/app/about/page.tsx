@@ -23,9 +23,9 @@ export default function AboutPage() {
         </div>
 
         {/* Feature Visual: Editorial Atelier Banner */}
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#161616] border border-[#C5A880]/30 mb-16 p-8 sm:p-12 flex flex-col justify-between text-white">
-          <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-4">
-            <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-[#C5A880]">
+        <div className="relative aspect-auto min-h-[360px] sm:min-h-0 sm:aspect-[16/9] w-full overflow-hidden bg-[#161616] border border-[#C5A880]/30 mb-12 sm:mb-16 p-5 sm:p-12 flex flex-col justify-between text-white">
+          <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-3 sm:pb-4">
+            <span className="text-[10px] uppercase font-bold tracking-[0.25em] sm:tracking-[0.3em] text-[#C5A880]">
               The FAAVY Atelier • Oye-Ekiti
             </span>
             <span className="text-[10px] font-mono text-neutral-400">
@@ -33,8 +33,8 @@ export default function AboutPage() {
             </span>
           </div>
 
-          <div className="my-auto max-w-2xl space-y-3">
-            <h2 className="font-serif-luxury text-2xl sm:text-3xl lg:text-4xl font-light text-[#FAF8F5] leading-tight">
+          <div className="my-6 sm:my-auto max-w-2xl space-y-2 sm:space-y-3">
+            <h2 className="font-serif-luxury text-xl sm:text-3xl lg:text-4xl font-light text-[#FAF8F5] leading-tight">
               Where Precision Meets African Executive Authority
             </h2>
             <p className="text-xs sm:text-sm text-neutral-300 font-light leading-relaxed">
@@ -42,7 +42,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-6 border-t border-[#2A2A2A] pt-4 text-xs text-neutral-400">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-6 border-t border-[#2A2A2A] pt-3 sm:pt-4 text-[10px] sm:text-xs text-neutral-400">
             <div className="flex items-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full bg-[#C5A880]" />
               <span>Super 140s Virgin Wool</span>

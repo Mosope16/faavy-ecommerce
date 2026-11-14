@@ -100,7 +100,7 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
       )}
 
       {/* Brand & Communications */}
-      <div className="bg-[#161616] border border-[#27272A] p-6 space-y-4">
+      <div className="bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-4">
         <h3 className="font-serif-luxury text-base font-medium text-white border-b border-[#27272A] pb-3">
           Brand Identity & Communications
         </h3>
@@ -115,7 +115,7 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
               required
               value={storeName}
               onChange={(e) => setStoreName(e.target.value)}
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
             />
           </div>
 
@@ -129,7 +129,7 @@ export function SettingsForm({ initial }: { initial: SettingsData }) {
               value={whatsappNumber}
               onChange={(e) => setWhatsappNumber(e.target.value)}
               placeholder="e.g. 2348140000000"
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-xs font-mono text-white focus:border-[#C5A880] focus:outline-hidden"
+              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs font-mono text-white focus:border-[#C5A880] focus:outline-hidden"
             />
           </div>
         </div>

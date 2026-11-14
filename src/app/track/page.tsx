@@ -64,7 +64,7 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
         </div>
 
         {/* Search Box */}
-        <div className="bg-[#F5F2EB] border border-[#E8E3D8] p-6 mb-10 shadow-xs">
+        <div className="bg-[#F5F2EB] border border-[#E8E3D8] p-4 sm:p-6 mb-8 sm:mb-10 shadow-xs">
           <form method="GET" action="/track" className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-neutral-400" />
@@ -74,12 +74,12 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
                 defaultValue={orderNumber || ""}
                 placeholder="e.g. FAV-20261114-1234"
                 required
-                className="w-full bg-white border border-[#E8E3D8] pl-10 pr-4 py-3 text-xs uppercase tracking-wider text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                className="w-full bg-white border border-[#E8E3D8] pl-10 pr-4 py-3 text-base sm:text-xs uppercase tracking-wider text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden min-h-[44px]"
               />
             </div>
             <button
               type="submit"
-              className="bg-[#1A1A1A] px-7 py-3 text-xs font-semibold uppercase tracking-wider text-white hover:bg-[#C5A880] transition-colors"
+              className="bg-[#1A1A1A] px-7 py-3 text-xs font-semibold uppercase tracking-wider text-white hover:bg-[#C5A880] transition-colors min-h-[44px] flex items-center justify-center"
             >
               Track Order
             </button>
@@ -88,7 +88,7 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
 
         {/* Order Result */}
         {orderNumber && !order && (
-          <div className="border border-rose-200 bg-rose-50 p-6 text-center text-rose-800">
+          <div className="border border-rose-200 bg-rose-50 p-5 sm:p-6 text-center text-rose-800">
             <AlertCircle className="h-6 w-6 mx-auto mb-2 text-rose-600" />
             <h3 className="font-serif-luxury text-base font-semibold">
               Order Reference Not Found
@@ -102,12 +102,12 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
         {order && (
           <div className="bg-white border border-[#E8E3D8] shadow-sm divide-y divide-[#E8E3D8]">
             {/* Order Overview Header */}
-            <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#F5F2EB]/50">
+            <div className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#F5F2EB]/50">
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-widest text-[#8C6F45]">
                   Order Placed on {formatDate(order.createdAt)}
                 </span>
-                <h2 className="font-serif-luxury text-xl font-medium text-[#1A1A1A] mt-0.5">
+                <h2 className="font-serif-luxury text-lg sm:text-xl font-medium text-[#1A1A1A] mt-0.5 break-all sm:break-normal">
                   {order.orderNumber}
                 </h2>
                 <p className="text-xs text-neutral-500 mt-1">
@@ -128,7 +128,7 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
 
             {/* Shipment / Tracking Details */}
             {order.shipments.length > 0 && (
-              <div className="p-6 bg-neutral-50/50">
+              <div className="p-4 sm:p-6 bg-neutral-50/50">
                 <h4 className="text-xs uppercase font-bold tracking-wider text-[#1A1A1A] flex items-center gap-2 mb-3">
                   <Truck className="h-4 w-4 text-[#8C6F45]" />
                   <span>Logistics & Dispatch Information</span>
@@ -141,7 +141,7 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
                     {s.trackingNumber && (
                       <p>
                         <strong>Tracking Number:</strong>{" "}
-                        <span className="font-mono bg-white px-2 py-0.5 border border-[#E8E3D8]">
+                        <span className="font-mono bg-white px-2 py-0.5 border border-[#E8E3D8] break-all">
                           {s.trackingNumber}
                         </span>
                       </p>
@@ -155,13 +155,13 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
             )}
 
             {/* Items List */}
-            <div className="p-6 space-y-4">
+            <div className="p-4 sm:p-6 space-y-4">
               <h4 className="text-xs uppercase font-bold tracking-wider text-[#1A1A1A]">
                 Items in This Commission ({order.items.length})
               </h4>
               <div className="divide-y divide-[#E8E3D8]">
                 {order.items.map((item) => (
-                  <div key={item.id} className="py-3 flex justify-between items-center text-xs">
+                  <div key={item.id} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 text-xs">
                     <div>
                       <strong className="block text-sm font-serif-luxury text-[#1A1A1A]">
                         {item.productName}
@@ -179,7 +179,7 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
             </div>
 
             {/* Financial Summary */}
-            <div className="p-6 bg-[#FAF8F5] space-y-2 text-xs">
+            <div className="p-4 sm:p-6 bg-[#FAF8F5] space-y-2 text-xs">
               <div className="flex justify-between text-neutral-600">
                 <span>Subtotal</span>
                 <span>{formatNaira(order.subtotalInKobo)}</span>

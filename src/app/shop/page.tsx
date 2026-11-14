@@ -110,12 +110,12 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         </div>
 
         {/* Filter & Controls Bar */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-[#F5F2EB] border border-[#E8E3D8] p-4 sm:p-6 mb-10">
-          {/* Categories Pill Bar */}
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6 bg-[#F5F2EB] border border-[#E8E3D8] p-3 sm:p-5 mb-8 sm:mb-10">
+          {/* Categories Pill Bar - Horizontally scrollable on mobile */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1.5 sm:pb-0 sm:flex-wrap scrollbar-none -mx-1 px-1 sm:mx-0 sm:px-0">
             <Link
-              href="/shop"
-              className={`px-3.5 py-1.5 text-xs uppercase tracking-wider transition-colors ${
+              href={`/shop${sortParam !== "newest" ? `?sort=${sortParam}` : ""}`}
+              className={`shrink-0 px-3.5 py-2 text-xs uppercase tracking-wider transition-colors min-h-[36px] flex items-center ${
                 !selectedCategory
                   ? "bg-[#1A1A1A] text-white font-semibold"
                   : "bg-white text-neutral-700 border border-[#E8E3D8] hover:border-[#1A1A1A]"
@@ -129,9 +129,9 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 <Link
                   key={cat.id}
                   href={`/shop?category=${cat.slug}${
-                    sortParam ? `&sort=${sortParam}` : ""
+                    sortParam !== "newest" ? `&sort=${sortParam}` : ""
                   }`}
-                  className={`px-3.5 py-1.5 text-xs uppercase tracking-wider transition-colors ${
+                  className={`shrink-0 px-3.5 py-2 text-xs uppercase tracking-wider transition-colors min-h-[36px] flex items-center ${
                     isSelected
                       ? "bg-[#1A1A1A] text-white font-semibold"
                       : "bg-white text-neutral-700 border border-[#E8E3D8] hover:border-[#1A1A1A]"
@@ -144,29 +144,29 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           </div>
 
           {/* Availability & Sorting Controls */}
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-2 sm:pt-0 border-t border-[#E8E3D8]/60 lg:border-t-0">
             <Link
               href={`/shop?${new URLSearchParams({
                 ...(selectedCategory ? { category: selectedCategory } : {}),
                 ...(isMadeToOrderFilter !== true ? { madeToOrder: "true" } : {}),
-                ...(sortParam ? { sort: sortParam } : {}),
+                ...(sortParam !== "newest" ? { sort: sortParam } : {}),
               }).toString()}`}
-              className={`px-3 py-1.5 text-xs uppercase tracking-wider border transition-colors ${
+              className={`px-3 py-2 text-xs uppercase tracking-wider border transition-colors min-h-[36px] flex items-center ${
                 isMadeToOrderFilter === true
                   ? "bg-[#8C6F45] text-white border-[#8C6F45] font-semibold"
                   : "bg-white text-neutral-700 border-[#E8E3D8] hover:border-[#8C6F45]"
               }`}
             >
-              Made to Order Only
+              Made to Order
             </Link>
 
             <Link
               href={`/shop?${new URLSearchParams({
                 ...(selectedCategory ? { category: selectedCategory } : {}),
                 ...(isMadeToOrderFilter !== false ? { madeToOrder: "false" } : {}),
-                ...(sortParam ? { sort: sortParam } : {}),
+                ...(sortParam !== "newest" ? { sort: sortParam } : {}),
               }).toString()}`}
-              className={`px-3 py-1.5 text-xs uppercase tracking-wider border transition-colors ${
+              className={`px-3 py-2 text-xs uppercase tracking-wider border transition-colors min-h-[36px] flex items-center ${
                 isMadeToOrderFilter === false
                   ? "bg-[#1A1A1A] text-white border-[#1A1A1A] font-semibold"
                   : "bg-white text-neutral-700 border-[#E8E3D8] hover:border-[#1A1A1A]"
@@ -175,13 +175,42 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
               Ready to Wear
             </Link>
 
+            {/* Sort Dropdown */}
+            <form method="GET" action="/shop" className="inline-flex items-center">
+              {selectedCategory && (
+                <input type="hidden" name="category" value={selectedCategory} />
+              )}
+              {isMadeToOrderFilter !== undefined && (
+                <input
+                  type="hidden"
+                  name="madeToOrder"
+                  value={String(isMadeToOrderFilter)}
+                />
+              )}
+              {searchQuery && (
+                <input type="hidden" name="search" value={searchQuery} />
+              )}
+              <select
+                name="sort"
+                defaultValue={sortParam}
+                onChange={(e) => e.target.form?.submit()}
+                aria-label="Sort products"
+                className="bg-white border border-[#E8E3D8] px-2.5 py-2 text-xs uppercase tracking-wider text-neutral-800 focus:border-[#1A1A1A] focus:outline-hidden min-h-[36px]"
+              >
+                <option value="newest">Sort: Newest</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+              </select>
+            </form>
+
             {/* Clear Filters Reset */}
             {(selectedCategory ||
               isMadeToOrderFilter !== undefined ||
-              searchQuery) && (
+              searchQuery ||
+              sortParam !== "newest") && (
               <Link
                 href="/shop"
-                className="inline-flex items-center gap-1 px-3 py-1.5 text-xs text-red-700 hover:underline"
+                className="inline-flex items-center gap-1 px-2.5 py-2 text-xs text-red-700 hover:underline min-h-[36px]"
               >
                 <X className="h-3.5 w-3.5" />
                 <span>Reset</span>
@@ -223,7 +252,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             </div>
           </div>
         ) : (
-          <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <StaggerContainer className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
             {products.map((product) => {
               const primaryImg =
                 product.images.find((i) => i.isPrimary)?.url ||

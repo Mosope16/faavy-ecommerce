@@ -260,8 +260,8 @@ export default function CheckoutPage() {
           <div className="lg:col-span-7">
             <form onSubmit={handleCheckoutSubmit} className="space-y-8">
               {/* 1. Contact Information */}
-              <div className="bg-white border border-[#E8E3D8] p-6 sm:p-8 space-y-4">
-                <h3 className="font-serif-luxury text-lg font-medium text-[#1A1A1A] border-b border-[#E8E3D8] pb-3">
+              <div className="bg-white border border-[#E8E3D8] p-4 sm:p-8 space-y-4">
+                <h3 className="font-serif-luxury text-base sm:text-lg font-medium text-[#1A1A1A] border-b border-[#E8E3D8] pb-3">
                   1. Contact Information
                 </h3>
 
@@ -276,7 +276,7 @@ export default function CheckoutPage() {
                       placeholder="e.g. Chief Adeyemi Ogunlesi"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                      className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
                     />
                   </div>
 
@@ -290,7 +290,7 @@ export default function CheckoutPage() {
                       placeholder="+234 803 000 0000"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                      className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
                     />
                   </div>
                 </div>
@@ -305,7 +305,7 @@ export default function CheckoutPage() {
                     placeholder="adeyemi@executives.ng"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                    className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
                   />
                   <p className="mt-1 text-[10px] text-neutral-400">
                     Your digital receipt and shipment tracking links will be sent here.
@@ -314,8 +314,8 @@ export default function CheckoutPage() {
               </div>
 
               {/* 2. Delivery Address */}
-              <div className="bg-white border border-[#E8E3D8] p-6 sm:p-8 space-y-4">
-                <h3 className="font-serif-luxury text-lg font-medium text-[#1A1A1A] border-b border-[#E8E3D8] pb-3">
+              <div className="bg-white border border-[#E8E3D8] p-4 sm:p-8 space-y-4">
+                <h3 className="font-serif-luxury text-base sm:text-lg font-medium text-[#1A1A1A] border-b border-[#E8E3D8] pb-3">
                   2. Nationwide Delivery Destination
                 </h3>
 
@@ -329,7 +329,7 @@ export default function CheckoutPage() {
                     placeholder="e.g. 14 Glover Road, Ikoyi, Floor 3"
                     value={streetAddress}
                     onChange={(e) => setStreetAddress(e.target.value)}
-                    className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                    className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
                   />
                 </div>
 
@@ -344,7 +344,7 @@ export default function CheckoutPage() {
                       placeholder="e.g. Ikoyi or Ado-Ekiti"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                      className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
                     />
                   </div>
 
@@ -355,7 +355,7 @@ export default function CheckoutPage() {
                     <select
                       value={state}
                       onChange={(e) => setState(e.target.value)}
-                      className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                      className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
                     >
                       {NIGERIAN_STATES.map((st) => (
                         <option key={st} value={st}>
@@ -375,7 +375,7 @@ export default function CheckoutPage() {
                     placeholder="e.g. Leave with security at the reception, or specific sleeve measurement notes..."
                     value={deliveryInstructions}
                     onChange={(e) => setDeliveryInstructions(e.target.value)}
-                    className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
+                    className="w-full bg-[#FAF8F5] border border-[#E8E3D8] p-3 text-base sm:text-xs text-[#1A1A1A] focus:border-[#1A1A1A] focus:outline-hidden"
                   />
                 </div>
               </div>
@@ -385,7 +385,7 @@ export default function CheckoutPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting || isValidating}
-                  className="w-full flex items-center justify-center gap-2.5 bg-[#1A1A1A] px-8 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-colors shadow-lg disabled:bg-neutral-400"
+                  className="w-full flex items-center justify-center gap-2.5 bg-[#1A1A1A] px-6 sm:px-8 py-3.5 sm:py-4 text-xs font-semibold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-colors shadow-lg disabled:bg-neutral-400 min-h-[48px]"
                 >
                   {isSubmitting ? (
                     <>
@@ -410,7 +410,7 @@ export default function CheckoutPage() {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2.5 border border-[#25D366] bg-white px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#121212] hover:bg-[#E8F8EE] transition-colors"
+                  className="w-full flex items-center justify-center gap-2.5 border border-[#25D366] bg-white px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#121212] hover:bg-[#E8F8EE] transition-colors min-h-[48px]"
                 >
                   <MessageCircle className="h-4 w-4 text-[#25D366]" />
                   <span>Order via WhatsApp Concierge</span>
@@ -421,7 +421,7 @@ export default function CheckoutPage() {
 
           {/* Right: Order Summary Breakdown */}
           <div className="lg:col-span-5">
-            <div className="bg-white border border-[#E8E3D8] p-6 sm:p-8 space-y-6 sticky top-28 shadow-sm">
+            <div className="bg-white border border-[#E8E3D8] p-4 sm:p-8 space-y-6 relative lg:sticky lg:top-28 shadow-sm">
               <h3 className="font-serif-luxury text-lg font-medium text-[#1A1A1A] border-b border-[#E8E3D8] pb-3">
                 Order Summary ({items.length})
               </h3>
@@ -470,11 +470,11 @@ export default function CheckoutPage() {
                     placeholder="e.g. FAAVYFIRST"
                     value={discountCodeInput}
                     onChange={(e) => setDiscountCodeInput(e.target.value)}
-                    className="flex-1 bg-[#FAF8F5] border border-[#E8E3D8] px-3 py-2 text-xs uppercase tracking-wider focus:border-[#1A1A1A] focus:outline-hidden"
+                    className="flex-1 bg-[#FAF8F5] border border-[#E8E3D8] px-3 py-2 text-base sm:text-xs uppercase tracking-wider focus:border-[#1A1A1A] focus:outline-hidden min-h-[40px]"
                   />
                   <button
                     type="submit"
-                    className="bg-[#1A1A1A] px-4 py-2 text-[10px] font-semibold uppercase tracking-wider text-white hover:bg-[#C5A880] transition-colors"
+                    className="bg-[#1A1A1A] px-4 py-2 text-[10px] font-semibold uppercase tracking-wider text-white hover:bg-[#C5A880] transition-colors min-h-[40px]"
                   >
                     Apply
                   </button>

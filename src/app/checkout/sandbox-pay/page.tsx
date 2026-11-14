@@ -20,8 +20,8 @@ export default async function SandboxPayPage({ searchParams }: SandboxPayProps) 
   const amountInKobo = parseInt(params.amount || "0", 10);
 
   return (
-    <div className="bg-[#FAF8F5] min-h-screen py-16 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white border border-[#E8E3D8] shadow-xl p-8 space-y-6">
+    <div className="bg-[#FAF8F5] min-h-screen py-12 sm:py-16 flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white border border-[#E8E3D8] shadow-xl p-5 sm:p-8 space-y-6">
         {/* Sandbox Notice Banner */}
         <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900">
           <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
