@@ -88,5 +88,5 @@ node scripts/seed.mjs
 - [ ] Test the WhatsApp Concierge link to ensure it opens WhatsApp with pre-filled details.
 - [ ] Add item to bag and verify slide-out cart drawer.
 - [ ] Test guest checkout with test order.
-- [ ] Log in to `/admin` using initial credentials (`admin@faavy.ng`).
+- [ ] Log in to `/admin` using initial credentials (`favourohieku@gmail.com`).
 - [ ] Update admin password and configure live WhatsApp number in `/admin/settings`.

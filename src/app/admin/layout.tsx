@@ -12,12 +12,15 @@ import {
   ExternalLink,
   Shield,
 } from "lucide-react";
+import { getAdminSession } from "@/lib/admin-auth";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getAdminSession();
+  const adminEmail = session?.user?.email || "favourohieku@gmail.com";
   const navItems = [
     { label: "Overview", href: "/admin", icon: LayoutDashboard },
     { label: "Orders", href: "/admin/orders", icon: ShoppingBag },
@@ -96,7 +99,7 @@ export default function AdminLayout({
           </div>
           <div className="flex items-center gap-4 text-xs">
             <span className="text-neutral-400">Signed in as:</span>
-            <span className="font-semibold text-[#C5A880]">admin@faavy.ng</span>
+            <span className="font-semibold text-[#C5A880]">{adminEmail}</span>
           </div>
         </header>
 

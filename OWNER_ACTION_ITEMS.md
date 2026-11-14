@@ -33,4 +33,4 @@ This document lists decisions and production credentials that specifically requi
    - Standard return window (e.g., 7 days for unworn ready-to-wear with tags intact; bespoke made-to-order non-refundable unless defective).
 
 4. **Initial Admin Credentials:**
-   - Seed script creates a secure initial admin account (`admin@faavy.ng`). Owner should immediately update password upon return.
+   - Seed script creates a secure initial admin account (`favourohieku@gmail.com`). Owner should immediately update password upon return.
