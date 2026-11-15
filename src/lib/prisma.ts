@@ -18,8 +18,8 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
  */
 export async function withDbRetry<T>(
   operation: () => Promise<T>,
-  retries = 2,
-  delayMs = 800
+  retries = 3,
+  delayMs = 1000
 ): Promise<T> {
   let lastError: unknown;
   for (let attempt = 0; attempt <= retries; attempt++) {
@@ -33,12 +33,14 @@ export async function withDbRetry<T>(
           err.message.includes("Can't reach database server") ||
           err.message.includes("Connection pool timeout") ||
           err.message.includes("connection pool") ||
+          err.message.includes("P2024") ||
+          err.message.includes("P2028") ||
           err.name === "PrismaClientInitializationError" ||
           err.name === "PrismaClientKnownRequestError");
 
       if (isTransient && attempt < retries) {
         console.warn(
-          `[Prisma] Neon compute wake-up delay detected. Retrying in ${delayMs * (attempt + 1)}ms (attempt ${attempt + 1}/${retries})...`
+          `[Prisma] Connection pool delay / Neon wake-up detected. Retrying in ${delayMs * (attempt + 1)}ms (attempt ${attempt + 1}/${retries})...`
         );
         await new Promise((resolve) => setTimeout(resolve, delayMs * (attempt + 1)));
         continue;

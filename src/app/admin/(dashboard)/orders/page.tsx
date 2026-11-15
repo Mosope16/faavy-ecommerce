@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { formatNaira, formatDate } from "@/lib/utils";
 import { ShoppingBag, Search, Filter } from "lucide-react";
 
@@ -30,15 +30,29 @@ export default async function AdminOrdersPage({ searchParams }: OrdersPageProps)
     ];
   }
 
-  const orders = await prisma.order.findMany({
-    where: whereClause,
+  let orders: Awaited<ReturnType<typeof prisma.order.findMany<{
     include: {
-      items: true,
-      payments: true,
-      shipments: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
+      items: true;
+      payments: true;
+      shipments: true;
+    };
+  }>>> = [];
+
+  try {
+    orders = await withDbRetry(() =>
+      prisma.order.findMany({
+        where: whereClause,
+        include: {
+          items: true,
+          payments: true,
+          shipments: true,
+        },
+        orderBy: { createdAt: "desc" },
+      })
+    );
+  } catch (error) {
+    console.error("[AdminOrdersPage] Failed to fetch orders:", error);
+  }
 
   const statuses = [
     "ALL",

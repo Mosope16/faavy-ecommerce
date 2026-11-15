@@ -1,17 +1,24 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { ProductForm } from "@/components/admin/product-form";
 import { ArrowLeft } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewProductPage() {
-  const categories = await prisma.category.findMany({
-    where: { isActive: true },
-    orderBy: { displayOrder: "asc" },
-    select: { id: true, name: true },
-  });
+  let categories: Array<{ id: string; name: string }> = [];
+  try {
+    categories = await withDbRetry(() =>
+      prisma.category.findMany({
+        where: { isActive: true },
+        orderBy: { displayOrder: "asc" },
+        select: { id: true, name: true },
+      })
+    );
+  } catch (error) {
+    console.error("[NewProductPage] Failed to fetch categories:", error);
+  }
 
   return (
     <div className="space-y-6 max-w-4xl">

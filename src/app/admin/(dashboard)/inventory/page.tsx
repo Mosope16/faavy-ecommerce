@@ -1,5 +1,5 @@
 import React from "react";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import { InventoryAdjustModal } from "@/components/admin/inventory-adjust-modal";
 import { Package, History, ArrowDownRight, ArrowUpRight } from "lucide-react";
@@ -7,23 +7,40 @@ import { Package, History, ArrowDownRight, ArrowUpRight } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function AdminInventoryPage() {
-  const [variants, movements] = await Promise.all([
-    prisma.productVariant.findMany({
-      include: {
-        product: { select: { name: true, slug: true, isMadeToOrder: true } },
-      },
-      orderBy: [{ stockQuantity: "asc" }, { updatedAt: "desc" }],
-    }),
-    prisma.inventoryMovement.findMany({
-      take: 15,
-      orderBy: { createdAt: "desc" },
-      include: {
-        variant: {
-          include: { product: { select: { name: true } } },
-        },
-      },
-    }),
-  ]);
+  let variants: Awaited<ReturnType<typeof prisma.productVariant.findMany<{
+    include: {
+      product: { select: { name: true; slug: true; isMadeToOrder: true } };
+    };
+  }>>> = [];
+  let movements: Awaited<ReturnType<typeof prisma.inventoryMovement.findMany<{
+    include: {
+      variant: { include: { product: { select: { name: true } } } };
+    };
+  }>>> = [];
+
+  try {
+    [variants, movements] = await withDbRetry(() =>
+      Promise.all([
+        prisma.productVariant.findMany({
+          include: {
+            product: { select: { name: true, slug: true, isMadeToOrder: true } },
+          },
+          orderBy: [{ stockQuantity: "asc" }, { updatedAt: "desc" }],
+        }),
+        prisma.inventoryMovement.findMany({
+          take: 15,
+          orderBy: { createdAt: "desc" },
+          include: {
+            variant: {
+              include: { product: { select: { name: true } } },
+            },
+          },
+        }),
+      ])
+    );
+  } catch (error) {
+    console.error("[AdminInventoryPage] Failed to fetch inventory:", error);
+  }
 
   return (
     <div className="space-y-10">

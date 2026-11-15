@@ -1,29 +1,49 @@
 import React from "react";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { SettingsForm } from "@/components/admin/settings-form";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminSettingsPage() {
-  let settings = await prisma.storeSettings.findUnique({
-    where: { id: "default" },
-  });
+  let settings = await withDbRetry(() =>
+    prisma.storeSettings.findUnique({
+      where: { id: "default" },
+    })
+  ).catch(() => null);
 
   if (!settings) {
-    settings = await prisma.storeSettings.create({
-      data: {
-        id: "default",
-        storeName: "FAAVY",
-        currency: "NGN",
-        whatsappNumber: "2348140000000",
-        contactEmail: "concierge@faavy.ng",
-        contactPhone: "+234 814 000 0000",
-        storeAddress: "Oye-Ekiti, Ekiti State, Nigeria",
-        standardShippingFeeInKobo: 350000,
-        freeShippingThresholdInKobo: 10000000,
-      },
-    });
+    try {
+      settings = await withDbRetry(() =>
+        prisma.storeSettings.create({
+          data: {
+            id: "default",
+            storeName: "FAAVY",
+            currency: "NGN",
+            whatsappNumber: "2348140000000",
+            contactEmail: "concierge@faavy.ng",
+            contactPhone: "+234 814 000 0000",
+            storeAddress: "Oye-Ekiti, Ekiti State, Nigeria",
+            standardShippingFeeInKobo: 350000,
+            freeShippingThresholdInKobo: 10000000,
+          },
+        })
+      );
+    } catch (e) {
+      console.error("[AdminSettingsPage] Could not initialize settings:", e);
+    }
   }
+
+  const defaultSettings = {
+    storeName: "FAAVY",
+    whatsappNumber: "2349138304922",
+    contactEmail: "concierge@faavy.ng",
+    contactPhone: "+234 913 830 4922",
+    storeAddress: "Oye-Ekiti, Ekiti State, Nigeria",
+    announcementBanner: "Complimentary nationwide delivery on orders over ₦100,000",
+    standardShippingFeeInKobo: 350000,
+    freeShippingThresholdInKobo: 10000000,
+    instagramHandle: "faavy.ng",
+  };
 
   return (
     <div className="space-y-6">
@@ -39,7 +59,7 @@ export default async function AdminSettingsPage() {
         </p>
       </div>
 
-      <SettingsForm initial={settings} />
+      <SettingsForm initial={settings || defaultSettings} />
     </div>
   );
 }

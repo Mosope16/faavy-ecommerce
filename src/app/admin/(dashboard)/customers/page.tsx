@@ -1,21 +1,34 @@
 import React from "react";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import { Users, Mail, Phone } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminCustomersPage() {
-  const customers = await prisma.customer.findMany({
+  let customers: Awaited<ReturnType<typeof prisma.customer.findMany<{
     include: {
-      _count: { select: { orders: true } },
-      orders: {
+      _count: { select: { orders: true } };
+      orders: { orderBy: { createdAt: "desc" }; take: 1 };
+    };
+  }>>> = [];
+
+  try {
+    customers = await withDbRetry(() =>
+      prisma.customer.findMany({
+        include: {
+          _count: { select: { orders: true } },
+          orders: {
+            orderBy: { createdAt: "desc" },
+            take: 1,
+          },
+        },
         orderBy: { createdAt: "desc" },
-        take: 1,
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+      })
+    );
+  } catch (error) {
+    console.error("[AdminCustomersPage] Failed to fetch customers:", error);
+  }
 
   return (
     <div className="space-y-6">

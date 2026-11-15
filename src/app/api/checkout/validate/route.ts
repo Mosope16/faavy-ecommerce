@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { shippingService } from "@/lib/shipping";
+import { formatNaira } from "@/lib/utils";
 
 const validateCartSchema = z.object({
   state: z.string().min(2),
@@ -84,24 +85,49 @@ export async function POST(req: NextRequest) {
     // Validate discount if supplied
     let discountInKobo = 0;
     let appliedDiscountCode: string | null = null;
+    let discountMessage: string | null = null;
+    let discountError: string | null = null;
 
-    if (discountCode) {
-      const discount = await prisma.discount.findUnique({
-        where: { code: discountCode.trim().toUpperCase(), isActive: true },
-      });
+    if (discountCode && discountCode.trim()) {
+      const cleanCode = discountCode.trim().toUpperCase();
+      const discount = await withDbRetry(() =>
+        prisma.discount.findUnique({
+          where: { code: cleanCode },
+        })
+      );
 
-      if (discount) {
-        const isNotExpired = !discount.expiresAt || discount.expiresAt > new Date();
-        const hasUsesLeft = !discount.maxUses || discount.usedCount < discount.maxUses;
+      if (!discount || !discount.isActive) {
+        discountError = `Voucher code "${cleanCode}" is invalid or inactive.`;
+      } else {
+        const isNotExpired =
+          !discount.expiresAt || discount.expiresAt > new Date();
+        const hasUsesLeft =
+          !discount.maxUses || discount.usedCount < discount.maxUses;
         const meetsMinSpend = subtotalInKobo >= discount.minSpendInKobo;
 
-        if (isNotExpired && hasUsesLeft && meetsMinSpend) {
+        if (!isNotExpired) {
+          discountError = `Voucher "${discount.code}" has expired.`;
+        } else if (!hasUsesLeft) {
+          discountError = `Voucher "${discount.code}" has reached its maximum redemptions.`;
+        } else if (!meetsMinSpend) {
+          const diffInKobo = discount.minSpendInKobo - subtotalInKobo;
+          discountError = `Voucher "${discount.code}" requires a minimum spend of ${formatNaira(
+            discount.minSpendInKobo
+          )} (add ${formatNaira(diffInKobo)} more).`;
+        } else {
           if (discount.discountPercent) {
             discountInKobo = Math.round(
               (subtotalInKobo * discount.discountPercent) / 100
             );
+            discountMessage = `${discount.discountPercent}% off applied! (${formatNaira(
+              discountInKobo
+            )} saved)`;
           } else if (discount.discountAmountInKobo) {
-            discountInKobo = Math.min(subtotalInKobo, discount.discountAmountInKobo);
+            discountInKobo = Math.min(
+              subtotalInKobo,
+              discount.discountAmountInKobo
+            );
+            discountMessage = `${formatNaira(discountInKobo)} voucher applied!`;
           }
           appliedDiscountCode = discount.code;
         }
@@ -125,6 +151,8 @@ export async function POST(req: NextRequest) {
       subtotalInKobo,
       discountInKobo,
       discountCode: appliedDiscountCode,
+      discountMessage,
+      discountError,
       shippingFeeInKobo,
       totalInKobo,
       shippingEstimate,

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { formatNaira, formatDate } from "@/lib/utils";
 import { OrderStatusController } from "@/components/admin/order-status-controller";
 import { ArrowLeft, User, MapPin, CreditCard, Package } from "lucide-react";
@@ -17,16 +17,18 @@ interface OrderDetailPageProps {
 export default async function AdminOrderDetailPage({ params }: OrderDetailPageProps) {
   const { id } = await params;
 
-  const order = await prisma.order.findUnique({
-    where: { id },
-    include: {
-      items: true,
-      payments: true,
-      shipments: true,
-      shippingAddress: true,
-      customer: true,
-    },
-  });
+  const order = await withDbRetry(() =>
+    prisma.order.findUnique({
+      where: { id },
+      include: {
+        items: true,
+        payments: true,
+        shipments: true,
+        shippingAddress: true,
+        customer: true,
+      },
+    })
+  );
 
   if (!order) {
     notFound();

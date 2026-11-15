@@ -17,6 +17,8 @@ import {
   Check,
   ArrowLeft,
   Loader2,
+  Tag,
+  X,
 } from "lucide-react";
 
 const NIGERIAN_STATES = [
@@ -71,6 +73,11 @@ export default function CheckoutPage() {
   const [state, setState] = useState("Lagos");
   const [deliveryInstructions, setDeliveryInstructions] = useState("");
   const [discountCodeInput, setDiscountCodeInput] = useState("");
+  const [discountFeedback, setDiscountFeedback] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+  const [isApplyingDiscount, setIsApplyingDiscount] = useState(false);
 
   // Validation & pricing from server
   const [isValidating, setIsValidating] = useState(false);
@@ -93,13 +100,16 @@ export default function CheckoutPage() {
     setIsValidating(true);
     setErrorMsg(null);
 
+    const codeToSend =
+      appliedCode !== undefined ? appliedCode : discountCodeInput;
+
     try {
       const res = await fetch("/api/checkout/validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           state,
-          discountCode: appliedCode !== undefined ? appliedCode : discountCodeInput,
+          discountCode: codeToSend || null,
           items: items.map((i) => ({
             productId: i.productId,
             variantId: i.variantId,
@@ -118,13 +128,32 @@ export default function CheckoutPage() {
           discountCode: data.discountCode,
           shippingFeeInKobo: data.shippingFeeInKobo,
           totalInKobo: data.totalInKobo,
-          shippingTier: data.shippingEstimate?.serviceTier || "Nationwide Delivery",
+          shippingTier:
+            data.shippingEstimate?.serviceTier || "Nationwide Delivery",
         });
+
+        // Provide explicit voucher feedback if user submitted a code
+        if (codeToSend && codeToSend.trim().length > 0) {
+          if (data.discountError) {
+            setDiscountFeedback({
+              type: "error",
+              message: data.discountError,
+            });
+          } else if (data.discountMessage) {
+            setDiscountFeedback({
+              type: "success",
+              message: data.discountMessage,
+            });
+          }
+        } else if (appliedCode === "") {
+          setDiscountFeedback(null);
+        }
       }
     } catch {
       setErrorMsg("Network error verifying pricing with FAAVY server.");
     } finally {
       setIsValidating(false);
+      setIsApplyingDiscount(false);
     }
   };
 
@@ -135,7 +164,15 @@ export default function CheckoutPage() {
 
   const handleApplyDiscount = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!discountCodeInput.trim()) return;
+    setIsApplyingDiscount(true);
     validateWithServer(discountCodeInput.trim());
+  };
+
+  const handleRemoveDiscount = () => {
+    setDiscountCodeInput("");
+    setDiscountFeedback(null);
+    validateWithServer("");
   };
 
   const handleCheckoutSubmit = async (e: React.FormEvent) => {
@@ -460,32 +497,69 @@ export default function CheckoutPage() {
               </div>
 
               {/* Promo Code Form */}
-              <form onSubmit={handleApplyDiscount} className="border-t border-[#E8E3D8] pt-4">
+              <div className="border-t border-[#E8E3D8] pt-4">
                 <label className="block text-[10px] font-semibold uppercase tracking-wider text-neutral-500 mb-1.5">
                   Have a promotional voucher?
                 </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="e.g. FAAVYFIRST"
-                    value={discountCodeInput}
-                    onChange={(e) => setDiscountCodeInput(e.target.value)}
-                    className="flex-1 bg-[#FAF8F5] border border-[#E8E3D8] px-3 py-2 text-base sm:text-xs uppercase tracking-wider focus:border-[#1A1A1A] focus:outline-hidden min-h-[40px]"
-                  />
-                  <button
-                    type="submit"
-                    className="bg-[#1A1A1A] px-4 py-2 text-[10px] font-semibold uppercase tracking-wider text-white hover:bg-[#C5A880] transition-colors min-h-[40px]"
-                  >
-                    Apply
-                  </button>
-                </div>
-                {serverSummary?.discountCode && (
-                  <p className="text-xs text-emerald-700 mt-1.5 flex items-center gap-1">
-                    <Check className="h-3 w-3" />
-                    <span>Voucher &ldquo;{serverSummary.discountCode}&rdquo; applied!</span>
-                  </p>
+
+                {serverSummary?.discountCode ? (
+                  <div className="flex items-center justify-between p-2.5 bg-[#F5F2EB] border border-[#C5A880]/50 rounded-xs">
+                    <div className="flex items-center gap-2">
+                      <Tag className="h-4 w-4 text-[#8C6F45]" />
+                      <div>
+                        <span className="font-mono text-xs font-bold text-[#1A1A1A]">
+                          {serverSummary.discountCode}
+                        </span>
+                        <span className="text-[11px] text-[#8C6F45] block font-medium">
+                          {discountFeedback?.type === "success"
+                            ? discountFeedback.message
+                            : `-${formatNaira(serverSummary.discountInKobo)} applied`}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleRemoveDiscount}
+                      className="text-[11px] text-neutral-500 hover:text-rose-600 font-medium px-2 py-1 rounded-xs hover:bg-white transition-colors"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleApplyDiscount} className="space-y-1.5">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="e.g. FAAVYFIRST"
+                        value={discountCodeInput}
+                        onChange={(e) => {
+                          setDiscountCodeInput(e.target.value);
+                          if (discountFeedback) setDiscountFeedback(null);
+                        }}
+                        className="flex-1 bg-[#FAF8F5] border border-[#E8E3D8] px-3 py-2 text-base sm:text-xs uppercase tracking-wider focus:border-[#1A1A1A] focus:outline-hidden min-h-[40px]"
+                      />
+                      <button
+                        type="submit"
+                        disabled={isApplyingDiscount || !discountCodeInput.trim()}
+                        className="bg-[#1A1A1A] px-4 py-2 text-[10px] font-semibold uppercase tracking-wider text-white hover:bg-[#C5A880] disabled:opacity-50 transition-colors min-h-[40px] flex items-center justify-center gap-1.5"
+                      >
+                        {isApplyingDiscount ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <span>Apply</span>
+                        )}
+                      </button>
+                    </div>
+
+                    {discountFeedback?.type === "error" && (
+                      <p className="text-xs text-rose-600 flex items-center gap-1.5 pt-0.5">
+                        <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+                        <span>{discountFeedback.message}</span>
+                      </p>
+                    )}
+                  </form>
                 )}
-              </form>
+              </div>
 
               {/* Cost Calculation Rows */}
               <div className="border-t border-[#E8E3D8] pt-4 space-y-2.5 text-xs">
@@ -499,8 +573,11 @@ export default function CheckoutPage() {
                 </div>
 
                 {serverSummary && serverSummary.discountInKobo > 0 && (
-                  <div className="flex justify-between text-[#8C6F45]">
-                    <span>Discount</span>
+                  <div className="flex justify-between text-[#8C6F45] font-medium">
+                    <span className="flex items-center gap-1">
+                      <Tag className="h-3 w-3" />
+                      <span>Voucher ({serverSummary.discountCode || "Applied"})</span>
+                    </span>
                     <span>-{formatNaira(serverSummary.discountInKobo)}</span>
                   </div>
                 )}

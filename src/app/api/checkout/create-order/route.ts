@@ -50,7 +50,8 @@ export async function POST(req: NextRequest) {
     } = parsed.data;
 
     // Run order creation and inventory deduction in a strict database transaction
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(
+      async (tx) => {
       let subtotalInKobo = 0;
       const orderItemData = [];
       const stockDeductionPlan = [];
@@ -240,30 +241,46 @@ export async function POST(req: NextRequest) {
         payment,
         totalInKobo,
       };
-    });
+    },
+    { maxWait: 15000, timeout: 30000 }
+  );
 
-    // Outside transaction: Initialize Paystack payment
+    // Outside transaction: Initialize payment or grant zero-balance order
     const appUrl =
       process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const callbackUrl = `${appUrl}/checkout/verify?reference=${result.payment.reference}`;
 
-    const paystackResponse = await paystack.initializeTransaction({
-      email,
-      amountInKobo: result.totalInKobo,
-      reference: result.payment.reference,
-      callbackUrl,
-      metadata: {
-        orderNumber: result.order.orderNumber,
-        customerName: fullName,
-      },
-    });
+    let authorizationUrl: string;
 
-    let authorizationUrl = paystackResponse.data?.authorization_url;
+    if (result.totalInKobo === 0) {
+      // 100% discount voucher applied: auto-confirm without charging card
+      await prisma.$transaction([
+        prisma.payment.update({
+          where: { id: result.payment.id },
+          data: { status: "PAID" },
+        }),
+        prisma.order.update({
+          where: { id: result.order.id },
+          data: { status: "CONFIRMED" },
+        }),
+      ]);
+      authorizationUrl = `${appUrl}/checkout/confirmation?orderNumber=${result.order.orderNumber}`;
+    } else {
+      const callbackUrl = `${appUrl}/checkout/verify?reference=${result.payment.reference}`;
 
-    // If Paystack demo key returned no url (e.g. dummy key or offline test),
-    // provide the sandbox simulation url directly so the user journey continues seamlessly
-    if (!authorizationUrl) {
-      authorizationUrl = `${appUrl}/checkout/sandbox-pay?reference=${result.payment.reference}&orderNumber=${result.order.orderNumber}&amount=${result.totalInKobo}`;
+      const paystackResponse = await paystack.initializeTransaction({
+        email,
+        amountInKobo: result.totalInKobo,
+        reference: result.payment.reference,
+        callbackUrl,
+        metadata: {
+          orderNumber: result.order.orderNumber,
+          customerName: fullName,
+        },
+      });
+
+      authorizationUrl =
+        paystackResponse.data?.authorization_url ||
+        `${appUrl}/checkout/sandbox-pay?reference=${result.payment.reference}&orderNumber=${result.order.orderNumber}&amount=${result.totalInKobo}`;
     }
 
     return NextResponse.json({

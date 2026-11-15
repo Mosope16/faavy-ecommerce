@@ -1,17 +1,27 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { Layers, Plus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminCategoriesPage() {
-  const categories = await prisma.category.findMany({
-    include: {
-      _count: { select: { products: true } },
-    },
-    orderBy: { displayOrder: "asc" },
-  });
+  let categories: Awaited<ReturnType<typeof prisma.category.findMany<{
+    include: { _count: { select: { products: true } } };
+  }>>> = [];
+
+  try {
+    categories = await withDbRetry(() =>
+      prisma.category.findMany({
+        include: {
+          _count: { select: { products: true } },
+        },
+        orderBy: { displayOrder: "asc" },
+      })
+    );
+  } catch (error) {
+    console.error("[AdminCategoriesPage] Failed to fetch categories:", error);
+  }
 
   return (
     <div className="space-y-6">

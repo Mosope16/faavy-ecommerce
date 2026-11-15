@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { formatNaira, formatDate } from "@/lib/utils";
 import { Package, Plus, CheckCircle, XCircle } from "lucide-react";
 import { ProductRowActions } from "@/components/admin/product-row-actions";
@@ -9,14 +9,28 @@ import { ProductRowActions } from "@/components/admin/product-row-actions";
 export const dynamic = "force-dynamic";
 
 export default async function AdminProductsPage() {
-  const products = await prisma.product.findMany({
+  let products: Awaited<ReturnType<typeof prisma.product.findMany<{
     include: {
-      category: true,
-      images: { orderBy: { displayOrder: "asc" }, take: 1 },
-      variants: { where: { isActive: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+      category: true;
+      images: { orderBy: { displayOrder: "asc" }; take: 1 };
+      variants: { where: { isActive: true } };
+    };
+  }>>> = [];
+
+  try {
+    products = await withDbRetry(() =>
+      prisma.product.findMany({
+        include: {
+          category: true,
+          images: { orderBy: { displayOrder: "asc" }, take: 1 },
+          variants: { where: { isActive: true } },
+        },
+        orderBy: { createdAt: "desc" },
+      })
+    );
+  } catch (error) {
+    console.error("[AdminProductsPage] Failed to fetch products:", error);
+  }
 
   return (
     <div className="space-y-6">

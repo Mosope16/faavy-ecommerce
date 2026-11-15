@@ -15,46 +15,62 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminOverviewPage() {
   // Aggregate real operational metrics from Neon database
-  const [
-    totalOrdersCount,
-    paidOrders,
-    pendingFulfillmentCount,
-    lowStockVariants,
-    recentOrders,
-    productsCount,
-  ] = await withDbRetry(() =>
-    Promise.all([
-      prisma.order.count(),
-      prisma.order.findMany({
-        where: {
-          payments: { some: { status: "PAID" } },
-        },
-        select: { totalInKobo: true },
-      }),
-      prisma.order.count({
-        where: {
-          status: { in: ["CONFIRMED", "PROCESSING", "READY_FOR_DISPATCH"] },
-        },
-      }),
-      prisma.productVariant.findMany({
-        where: {
-          stockQuantity: { lte: 3 },
-          product: { isMadeToOrder: false },
-        },
-        include: { product: true },
-        take: 5,
-      }),
-      prisma.order.findMany({
-        orderBy: { createdAt: "desc" },
-        take: 6,
-        include: {
-          payments: true,
-          items: true,
-        },
-      }),
-      prisma.product.count({ where: { isActive: true } }),
-    ])
-  );
+  let totalOrdersCount = 0;
+  let paidOrders: Array<{ totalInKobo: number }> = [];
+  let pendingFulfillmentCount = 0;
+  let lowStockVariants: Awaited<ReturnType<typeof prisma.productVariant.findMany<{
+    where: { stockQuantity: { lte: 3 }; product: { isMadeToOrder: false } };
+    include: { product: true };
+  }>>> = [];
+  let recentOrders: Awaited<ReturnType<typeof prisma.order.findMany<{
+    include: { payments: true; items: true };
+  }>>> = [];
+  let productsCount = 0;
+
+  try {
+    [
+      totalOrdersCount,
+      paidOrders,
+      pendingFulfillmentCount,
+      lowStockVariants,
+      recentOrders,
+      productsCount,
+    ] = await withDbRetry(() =>
+      Promise.all([
+        prisma.order.count(),
+        prisma.order.findMany({
+          where: {
+            payments: { some: { status: "PAID" } },
+          },
+          select: { totalInKobo: true },
+        }),
+        prisma.order.count({
+          where: {
+            status: { in: ["CONFIRMED", "PROCESSING", "READY_FOR_DISPATCH"] },
+          },
+        }),
+        prisma.productVariant.findMany({
+          where: {
+            stockQuantity: { lte: 3 },
+            product: { isMadeToOrder: false },
+          },
+          include: { product: true },
+          take: 5,
+        }),
+        prisma.order.findMany({
+          orderBy: { createdAt: "desc" },
+          take: 6,
+          include: {
+            payments: true,
+            items: true,
+          },
+        }),
+        prisma.product.count({ where: { isActive: true } }),
+      ])
+    );
+  } catch (error) {
+    console.error("[AdminOverviewPage] Failed to fetch metrics:", error);
+  }
 
   const grossRevenueInKobo = paidOrders.reduce(
     (acc, order) => acc + order.totalInKobo,

@@ -1,22 +1,38 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import { Truck, MapPin, CheckCircle, Clock } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminShipmentsPage() {
-  const shipments = await prisma.shipment.findMany({
+  let shipments: Awaited<ReturnType<typeof prisma.shipment.findMany<{
     include: {
       order: {
         include: {
-          shippingAddress: true,
+          shippingAddress: true;
+        };
+      };
+    };
+  }>>> = [];
+
+  try {
+    shipments = await withDbRetry(() =>
+      prisma.shipment.findMany({
+        include: {
+          order: {
+            include: {
+              shippingAddress: true,
+            },
+          },
         },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+        orderBy: { createdAt: "desc" },
+      })
+    );
+  } catch (error) {
+    console.error("[AdminShipmentsPage] Failed to fetch shipments:", error);
+  }
 
   return (
     <div className="space-y-6">
