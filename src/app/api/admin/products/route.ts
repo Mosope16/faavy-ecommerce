@@ -18,6 +18,7 @@ const productSchema = z.object({
     .array(
       z.object({
         url: z.string().min(1),
+        publicId: z.string().optional().nullable(),
         altText: z.string().optional().nullable(),
         isPrimary: z.boolean().default(false),
       })
@@ -82,6 +83,7 @@ export async function POST(req: NextRequest) {
           images: {
             create: (images || []).map((img, idx) => ({
               url: img.url,
+              publicId: img.publicId || null,
               altText: img.altText,
               isPrimary: img.isPrimary,
               displayOrder: idx,

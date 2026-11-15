@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2, Loader2, AlertCircle, Check } from "lucide-react";
+import { ImageUploadDropzone } from "@/components/admin/image-upload-dropzone";
 
 interface CategoryOption {
   id: string;
@@ -28,7 +29,9 @@ export function ProductForm({ categories }: ProductFormProps) {
   const [leadTimeDays, setLeadTimeDays] = useState(0);
 
   const [imageUrl, setImageUrl] = useState("");
+  const [imagePublicId, setImagePublicId] = useState("");
   const [secondaryImageUrl, setSecondaryImageUrl] = useState("");
+  const [secondaryImagePublicId, setSecondaryImagePublicId] = useState("");
 
   const [variants, setVariants] = useState<
     Array<{
@@ -109,6 +112,7 @@ export function ProductForm({ categories }: ProductFormProps) {
     if (imageUrl.trim()) {
       imagesPayload.push({
         url: imageUrl.trim(),
+        publicId: imagePublicId || null,
         altText: name,
         isPrimary: true,
       });
@@ -116,6 +120,7 @@ export function ProductForm({ categories }: ProductFormProps) {
     if (secondaryImageUrl.trim()) {
       imagesPayload.push({
         url: secondaryImageUrl.trim(),
+        publicId: secondaryImagePublicId || null,
         altText: `${name} Secondary`,
         isPrimary: false,
       });
@@ -338,39 +343,40 @@ export function ProductForm({ categories }: ProductFormProps) {
         </div>
       </div>
 
-      {/* 3. Imagery Assets */}
+      {/* 3. Imagery Assets (Direct Cloudinary Upload) */}
       <div className="bg-[#161616] border border-[#27272A] p-4 sm:p-6 space-y-4">
-        <h3 className="font-serif-luxury text-base font-medium text-white border-b border-[#27272A] pb-3">
-          3. Imagery Assets
-        </h3>
+        <div className="flex items-center justify-between border-b border-[#27272A] pb-3">
+          <h3 className="font-serif-luxury text-base font-medium text-white">
+            3. Imagery Assets
+          </h3>
+          <span className="text-[10px] text-[#C5A880] uppercase tracking-wider font-medium">
+            Cloudinary Powered
+          </span>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-[10px] uppercase font-bold tracking-wider text-neutral-400 mb-1.5">
-              Primary Image URL / Path *
-            </label>
-            <input
-              type="text"
-              required
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="https://res.cloudinary.com/... or image URL"
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
-            />
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <ImageUploadDropzone
+            label="Primary Garment Image"
+            value={imageUrl}
+            onChange={(url, pubId) => {
+              setImageUrl(url);
+              if (pubId) setImagePublicId(pubId);
+            }}
+            required
+            folder="faavy/products"
+            helperText="Featured on the catalogue grid, product hero and shopping bag."
+          />
 
-          <div>
-            <label className="block text-[10px] uppercase font-bold tracking-wider text-neutral-400 mb-1.5">
-              Secondary Hover Image URL
-            </label>
-            <input
-              type="text"
-              value={secondaryImageUrl}
-              onChange={(e) => setSecondaryImageUrl(e.target.value)}
-              placeholder="Optional secondary detail angle"
-              className="w-full bg-[#1F1F1F] border border-[#333333] p-3 text-base sm:text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
-            />
-          </div>
+          <ImageUploadDropzone
+            label="Secondary Hover Image"
+            value={secondaryImageUrl}
+            onChange={(url, pubId) => {
+              setSecondaryImageUrl(url);
+              if (pubId) setSecondaryImagePublicId(pubId);
+            }}
+            folder="faavy/products"
+            helperText="Appears smoothly when patrons hover over the product card."
+          />
         </div>
       </div>
 

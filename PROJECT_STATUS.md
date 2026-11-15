@@ -33,7 +33,8 @@
 - **Motion System:** Framer Motion (`framer-motion` 12.4.10) with custom luxury cubic-bezier deceleration curves and automatic `prefers-reduced-motion` fallbacks.
 - **Responsive Architecture:** Storefront slide-out drawer with backdrop blur, body scroll lock, and ~44px touch targets; Admin `AdminLayoutShell` responsive drawer with persistent desktop sidebar.
 - **Total Seeded Inventory:** 8 Categories, 8 Flagship Products, 33 Variant Stock Allocations.
-- **Verified Routes:** 36 compiled routes (17 statically prerendered, 19 dynamically rendered server components/APIs).
+- **Media & Asset Management:** Cloudinary API integrated (`y7rd6ddp`) with authenticated signed uploads, direct drag-and-drop admin dropzones, and automatic image optimization.
+- **Verified Routes:** 37 compiled routes (18 statically prerendered, 19 dynamically rendered server components/APIs).
 - **Automated Tests:** Business logic verified, `npx tsc --noEmit` exit 0, `npm run build` exit 0.
 
 ---
