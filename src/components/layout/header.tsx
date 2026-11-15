@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, Search, X, Shield, Phone, Truck } from "lucide-react";
+import { ShoppingBag, Search, X, Shield, Phone, Truck, ChevronRight } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 
 export function Header() {
@@ -211,62 +211,73 @@ export function Header() {
         createPortal(
           <AnimatePresence>
             {isMobileMenuOpen && (
-              <div className="fixed inset-0 z-[9999] lg:hidden flex">
+              <div className="fixed inset-0 z-[9999] flex justify-start lg:hidden">
                 {/* Backdrop with Soft Luxury Blur */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.25 }}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="fixed inset-0 bg-[#0D0D0D]/70 backdrop-blur-sm"
+                  className="fixed inset-0 bg-[#0D0D0D]/70 backdrop-blur-xs"
                   aria-hidden="true"
                 />
 
-                {/* Slide-out Menu Panel (Full Dynamic Viewport Height) */}
+                {/* Slide-out Menu Panel (Pinned to full viewport height top-to-bottom) */}
                 <motion.div
                   initial={{ x: "-100%" }}
                   animate={{ x: 0 }}
                   exit={{ x: "-100%" }}
-                  transition={{ type: "tween", duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                  className="relative flex flex-col h-[100dvh] w-[88%] max-w-[390px] bg-[#FAF8F5] shadow-2xl z-10 border-r border-[#E8E3D8] overflow-hidden"
+                  transition={{ type: "tween", duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative z-10 flex h-full h-[100dvh] max-h-[100dvh] w-[86%] max-w-[360px] flex-col bg-[#FAF8F5] text-[#1A1A1A] shadow-2xl border-r border-[#E8E3D8] overflow-hidden"
                 >
                   {/* Drawer Header (Fixed at Top) */}
-                  <div className="flex items-center justify-between px-6 py-5 border-b border-[#E8E3D8] bg-[#FAF8F5] shrink-0">
+                  <div className="flex items-center justify-between px-5 sm:px-6 py-4 sm:py-5 border-b border-[#E8E3D8] bg-[#FAF8F5] shrink-0">
                     <div className="flex flex-col">
                       <span className="font-serif-luxury text-xl font-bold tracking-[0.25em] text-[#1A1A1A] uppercase">
                         FAAVY
                       </span>
-                      <span className="text-[8px] uppercase tracking-[0.32em] text-[#8C6F45] font-medium mt-0.5">
+                      <span className="text-[8px] uppercase tracking-[0.3em] text-[#8C6F45] font-medium mt-0.5">
                         Haute Corporate • Oye-Ekiti
                       </span>
                     </div>
                     <button
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="h-10 w-10 rounded-full border border-[#E8E3D8] hover:border-[#1A1A1A] hover:bg-[#F5F2EB] flex items-center justify-center text-[#1A1A1A] transition-all min-h-[44px] min-w-[44px]"
+                      className="h-9 w-9 rounded-full border border-[#E8E3D8] hover:border-[#1A1A1A] hover:bg-[#F5F2EB] flex items-center justify-center text-[#1A1A1A] transition-all min-h-[36px] min-w-[36px]"
                       aria-label="Close Navigation Menu"
                     >
                       <X className="h-4 w-4" />
                     </button>
                   </div>
 
+                  {/* Fast In-Drawer Search Input */}
+                  <div className="px-5 sm:px-6 pt-3.5 pb-2 shrink-0">
+                    <form onSubmit={handleSearchSubmit} className="relative">
+                      <input
+                        type="text"
+                        placeholder="Search bespoke garments..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-[#F5F2EB] border border-[#E8E3D8] rounded-xs px-3.5 py-2 pl-9 text-xs text-[#1A1A1A] placeholder-neutral-400 focus:outline-hidden focus:border-[#C5A880] transition-colors"
+                      />
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-neutral-400" />
+                    </form>
+                  </div>
+
                   {/* Drawer Body (Scrollable Middle Section) */}
-                  <div className="flex-1 overflow-y-auto px-6 py-5 space-y-6 overscroll-contain">
+                  <div className="flex-1 overflow-y-auto px-5 sm:px-6 py-3 space-y-5 overscroll-contain">
                     {/* Section 1: Curated Collections */}
                     <div>
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-[9px] uppercase tracking-[0.25em] font-semibold text-[#8C6F45]">
-                          Collections & Garments
-                        </span>
-                        <span className="h-px flex-1 bg-[#E8E3D8]" />
-                      </div>
-                      <nav className="flex flex-col space-y-1">
+                      <span className="text-[9px] uppercase tracking-[0.25em] font-semibold text-[#8C6F45] block mb-2">
+                        Collections
+                      </span>
+                      <nav className="flex flex-col">
                         {[
-                          { label: "All Collections", href: "/shop", num: "01" },
-                          { label: "Suits & Tailored Blazers", href: "/category/jackets-suits", num: "02" },
-                          { label: "Corporate Gowns", href: "/category/corporate-gowns", num: "03" },
-                          { label: "Executive Shirts", href: "/category/shirts", num: "04" },
-                          { label: "Made to Order & Bespoke", href: "/shop?madeToOrder=true", num: "05" },
+                          { label: "All Collections", href: "/shop" },
+                          { label: "Suits & Tailored Blazers", href: "/category/jackets-suits" },
+                          { label: "Corporate Gowns", href: "/category/corporate-gowns" },
+                          { label: "Executive Shirts", href: "/category/shirts" },
+                          { label: "Made to Order & Bespoke", href: "/shop?madeToOrder=true" },
                         ].map((item) => {
                           const isActive = pathname === item.href;
                           return (
@@ -274,23 +285,22 @@ export function Header() {
                               key={item.href}
                               href={item.href}
                               onClick={() => setIsMobileMenuOpen(false)}
-                              className={`group flex items-center justify-between py-2.5 px-2 rounded-xs transition-all ${
+                              className={`group flex items-center justify-between py-2.5 text-sm font-serif-luxury tracking-wide border-b border-[#E8E3D8]/50 last:border-b-0 transition-colors ${
                                 isActive
-                                  ? "bg-[#F5F2EB] text-[#1A1A1A] font-semibold"
-                                  : "text-neutral-800 hover:text-[#1A1A1A] hover:bg-[#F5F2EB]/60"
+                                  ? "text-[#8C6F45] font-semibold"
+                                  : "text-[#1A1A1A] hover:text-[#8C6F45]"
                               }`}
                             >
-                              <div className="flex items-center gap-3">
-                                <span className="text-[10px] font-mono text-[#8C6F45]">
-                                  {item.num}
-                                </span>
-                                <span className="font-serif-luxury text-base tracking-wide group-hover:translate-x-1 transition-transform">
-                                  {item.label}
-                                </span>
-                              </div>
-                              {isActive && (
-                                <span className="h-1.5 w-1.5 rounded-full bg-[#8C6F45]" />
-                              )}
+                              <span className="group-hover:translate-x-1 transition-transform">
+                                {item.label}
+                              </span>
+                              <ChevronRight
+                                className={`h-3.5 w-3.5 transition-transform ${
+                                  isActive
+                                    ? "text-[#8C6F45]"
+                                    : "text-neutral-400 group-hover:text-[#8C6F45] group-hover:translate-x-0.5"
+                                }`}
+                              />
                             </Link>
                           );
                         })}
@@ -299,13 +309,10 @@ export function Header() {
 
                     {/* Section 2: The Maison */}
                     <div>
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-[9px] uppercase tracking-[0.25em] font-semibold text-[#8C6F45]">
-                          The Maison
-                        </span>
-                        <span className="h-px flex-1 bg-[#E8E3D8]" />
-                      </div>
-                      <nav className="flex flex-col space-y-1">
+                      <span className="text-[9px] uppercase tracking-[0.25em] font-semibold text-[#8C6F45] block mb-2">
+                        The Maison
+                      </span>
+                      <nav className="flex flex-col">
                         {[
                           { label: "Our Story & Heritage", href: "/about" },
                           { label: "Bespoke Concierge", href: "/contact" },
@@ -317,16 +324,16 @@ export function Header() {
                               key={item.href}
                               href={item.href}
                               onClick={() => setIsMobileMenuOpen(false)}
-                              className={`flex items-center justify-between py-2 px-2 text-xs uppercase tracking-[0.16em] rounded-xs transition-colors ${
+                              className={`group flex items-center justify-between py-2 text-xs uppercase tracking-[0.16em] border-b border-[#E8E3D8]/40 last:border-b-0 transition-colors ${
                                 isActive
-                                  ? "text-[#8C6F45] font-semibold bg-[#F5F2EB]"
-                                  : "text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB]/50"
+                                  ? "text-[#8C6F45] font-semibold"
+                                  : "text-neutral-600 hover:text-[#1A1A1A]"
                               }`}
                             >
-                              <span>{item.label}</span>
-                              {isActive && (
-                                <span className="h-1.5 w-1.5 rounded-full bg-[#8C6F45]" />
-                              )}
+                              <span className="group-hover:translate-x-1 transition-transform">
+                                {item.label}
+                              </span>
+                              <ChevronRight className="h-3 w-3 text-neutral-300 group-hover:text-[#8C6F45]" />
                             </Link>
                           );
                         })}
@@ -334,30 +341,30 @@ export function Header() {
                     </div>
 
                     {/* Section 3: Bespoke Stylist WhatsApp Card */}
-                    <div className="p-4 rounded-xs bg-[#F5F2EB] border border-[#E8E3D8] space-y-2.5">
+                    <div className="p-3.5 rounded-xs bg-[#F5F2EB] border border-[#E8E3D8] space-y-2">
                       <div className="flex items-center gap-2">
                         <span className="h-2 w-2 rounded-full bg-emerald-600" />
                         <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-[#1A1A1A]">
-                          Private Atelier Concierge
+                          Private Concierge
                         </span>
                       </div>
-                      <p className="text-xs text-neutral-600 leading-relaxed">
+                      <p className="text-[11px] text-neutral-600 leading-relaxed">
                         Direct styling consultations, measurement scheduling & bespoke tailoring inquiries.
                       </p>
                       <a
                         href="https://wa.me/2348000000000?text=Hello%20FAAVY%20Concierge%2C%20I%20would%20like%20to%20inquire%20about%20a%20bespoke%20commission."
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[#1A1A1A] hover:bg-[#8C6F45] text-white text-[11px] uppercase tracking-[0.16em] font-medium transition-colors rounded-xs min-h-[42px]"
+                        className="flex items-center justify-center gap-2 w-full py-2 px-3 bg-[#1A1A1A] hover:bg-[#8C6F45] text-white text-[10px] uppercase tracking-[0.16em] font-medium transition-colors rounded-xs min-h-[38px]"
                       >
-                        <Phone className="h-3.5 w-3.5 text-[#C5A880]" />
+                        <Phone className="h-3 w-3 text-[#C5A880]" />
                         <span>WhatsApp Stylist</span>
                       </a>
                     </div>
                   </div>
 
-                  {/* Drawer Footer (Fixed at Bottom) */}
-                  <div className="p-5 bg-[#F5F2EB]/80 border-t border-[#E8E3D8] space-y-3 shrink-0">
+                  {/* Drawer Footer (Fixed at Bottom with Safe Area Padding) */}
+                  <div className="p-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] bg-[#F5F2EB]/90 border-t border-[#E8E3D8] space-y-2.5 shrink-0">
                     <div className="flex items-center justify-between text-[11px] text-neutral-600">
                       <span className="uppercase tracking-wider">Currency: NGN (₦)</span>
                       <Link

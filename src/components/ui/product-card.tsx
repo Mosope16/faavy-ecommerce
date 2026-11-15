@@ -45,12 +45,20 @@ export function ProductCard({
   const [isHovered, setIsHovered] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
 
+  const isOutOfStock =
+    !isMadeToOrder && (defaultVariant?.stockQuantity ?? 0) <= 0;
+
   const displayImage =
     isHovered && secondaryImageUrl ? secondaryImageUrl : imageUrl;
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (isOutOfStock) {
+      window.location.href = `/product/${slug}`;
+      return;
+    }
 
     if (!defaultVariant) {
       window.location.href = `/product/${slug}`;
@@ -109,7 +117,11 @@ export function ProductCard({
 
         {/* Badges */}
         <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex flex-col gap-1 z-10 max-w-[85%]">
-          {isMadeToOrder ? (
+          {isOutOfStock ? (
+            <span className="bg-[#1A1A1A]/90 backdrop-blur-xs px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] uppercase font-medium tracking-wider text-neutral-300 border border-neutral-700/60 truncate">
+              Out of Stock
+            </span>
+          ) : isMadeToOrder ? (
             <span className="bg-[#121212]/90 backdrop-blur-xs px-2 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[10px] uppercase font-medium tracking-wider text-[#C5A880] border border-[#C5A880]/30 truncate">
               Made to Order ({leadTimeDays || 7}d)
             </span>
@@ -124,10 +136,12 @@ export function ProductCard({
         <div className="absolute inset-x-2 sm:inset-x-3 bottom-2 sm:bottom-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
             onClick={handleQuickAdd}
-            disabled={justAdded}
-            className="w-full flex items-center justify-center gap-1.5 sm:gap-2 bg-[#121212]/95 backdrop-blur-sm px-3 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-colors shadow-lg min-h-[36px]"
+            disabled={justAdded || isOutOfStock}
+            className="w-full flex items-center justify-center gap-1.5 sm:gap-2 bg-[#121212]/95 backdrop-blur-sm px-3 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#FAF8F5] hover:bg-[#C5A880] hover:text-[#121212] transition-colors shadow-lg min-h-[36px] disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {justAdded ? (
+            {isOutOfStock ? (
+              <span className="truncate">Out of Stock</span>
+            ) : justAdded ? (
               <>
                 <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#25D366]" />
                 <span className="truncate">Added</span>

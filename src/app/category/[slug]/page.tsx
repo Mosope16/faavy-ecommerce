@@ -1,7 +1,7 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { ProductCard } from "@/components/ui/product-card";
 import { FadeIn } from "@/components/motion/fade-in";
@@ -30,20 +30,22 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   let category: CategoryWithProducts | null = null;
 
   try {
-    category = await prisma.category.findUnique({
-      where: { slug },
-      include: {
-        products: {
-          where: { isActive: true },
-          include: {
-            category: true,
-            images: { orderBy: { displayOrder: "asc" } },
-            variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
+    category = await withDbRetry(() =>
+      prisma.category.findUnique({
+        where: { slug },
+        include: {
+          products: {
+            where: { isActive: true },
+            include: {
+              category: true,
+              images: { orderBy: { displayOrder: "asc" } },
+              variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
+            },
+            orderBy: { createdAt: "desc" },
           },
-          orderBy: { createdAt: "desc" },
         },
-      },
-    });
+      })
+    );
   } catch (err) {
     console.error("[CategoryPage] Database fetch failed:", err);
   }

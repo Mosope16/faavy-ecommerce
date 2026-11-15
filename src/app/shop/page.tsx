@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { ProductCard } from "@/components/ui/product-card";
 import { FadeIn } from "@/components/motion/fade-in";
@@ -70,21 +70,23 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   let categories: ShopCategory[] = [];
 
   try {
-    [products, categories] = await Promise.all([
-      prisma.product.findMany({
-        where: whereClause,
-        include: {
-          category: true,
-          images: { orderBy: { displayOrder: "asc" } },
-          variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
-        },
-        orderBy,
-      }),
-      prisma.category.findMany({
-        where: { isActive: true },
-        orderBy: { displayOrder: "asc" },
-      }),
-    ]);
+    [products, categories] = await withDbRetry(() =>
+      Promise.all([
+        prisma.product.findMany({
+          where: whereClause,
+          include: {
+            category: true,
+            images: { orderBy: { displayOrder: "asc" } },
+            variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
+          },
+          orderBy,
+        }),
+        prisma.category.findMany({
+          where: { isActive: true },
+          orderBy: { displayOrder: "asc" },
+        }),
+      ])
+    );
   } catch (err) {
     console.error("[ShopPage] Database fetch failed:", err);
   }

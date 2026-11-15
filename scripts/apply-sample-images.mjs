@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || "y7rd6ddp";
+// Universal Cloudinary demo cloud hosts the verified official sample assets
+const CLOUD_NAME = "demo";
 
 const SAMPLE_ASSIGNMENTS = [
   {

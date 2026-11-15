@@ -1,7 +1,7 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { ProductDetailView } from "@/components/product/product-detail-view";
 import { ProductCard } from "@/components/ui/product-card";
@@ -28,34 +28,38 @@ export default async function ProductPage({ params }: ProductPageProps) {
   let relatedProducts: ProductWithDetails[] = [];
 
   try {
-    [product, storeSettings] = await Promise.all([
-      prisma.product.findUnique({
-        where: { slug },
-        include: {
-          category: true,
-          images: { orderBy: { displayOrder: "asc" } },
-          variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
-        },
-      }),
-      prisma.storeSettings.findUnique({
-        where: { id: "default" },
-      }),
-    ]);
+    [product, storeSettings] = await withDbRetry(() =>
+      Promise.all([
+        prisma.product.findUnique({
+          where: { slug },
+          include: {
+            category: true,
+            images: { orderBy: { displayOrder: "asc" } },
+            variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
+          },
+        }),
+        prisma.storeSettings.findUnique({
+          where: { id: "default" },
+        }),
+      ])
+    );
 
     if (product?.isActive) {
-      relatedProducts = await prisma.product.findMany({
-        where: {
-          categoryId: product.categoryId,
-          id: { not: product.id },
-          isActive: true,
-        },
-        include: {
-          category: true,
-          images: { orderBy: { displayOrder: "asc" } },
-          variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
-        },
-        take: 3,
-      });
+      relatedProducts = await withDbRetry(() =>
+        prisma.product.findMany({
+          where: {
+            categoryId: product!.categoryId,
+            id: { not: product!.id },
+            isActive: true,
+          },
+          include: {
+            category: true,
+            images: { orderBy: { displayOrder: "asc" } },
+            variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
+          },
+          take: 3,
+        })
+      );
     }
   } catch (err) {
     console.error("[ProductPage] Database fetch failed:", err);

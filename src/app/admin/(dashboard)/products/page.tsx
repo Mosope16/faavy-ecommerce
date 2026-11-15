@@ -4,6 +4,7 @@ import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { formatNaira, formatDate } from "@/lib/utils";
 import { Package, Plus, CheckCircle, XCircle } from "lucide-react";
+import { ProductRowActions } from "@/components/admin/product-row-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -62,7 +63,7 @@ export default async function AdminProductsPage() {
                   <th className="p-4">Total Stock</th>
                   <th className="p-4">Base Price</th>
                   <th className="p-4">Status</th>
-                  <th className="p-4 text-right">Storefront</th>
+                  <th className="p-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#222222]">
@@ -74,26 +75,33 @@ export default async function AdminProductsPage() {
                   const thumb = prod.images[0]?.url || null;
 
                   return (
-                    <tr key={prod.id} className="hover:bg-[#1C1C1C]">
+                    <tr key={prod.id} className="hover:bg-[#1C1C1C] transition-colors">
                       <td className="p-4 flex items-center gap-3">
-                        <div className="relative h-12 w-10 shrink-0 bg-[#222222] border border-[#333333] overflow-hidden flex items-center justify-center">
+                        <Link
+                          href={`/admin/products/${prod.id}/edit`}
+                          className="relative h-12 w-10 shrink-0 bg-[#222222] border border-[#333333] hover:border-[#C5A880] overflow-hidden flex items-center justify-center transition-colors group"
+                          title="Edit Garment"
+                        >
                           {thumb ? (
                             <Image
                               src={thumb}
                               alt={prod.name}
                               fill
-                              className="object-cover"
+                              className="object-cover group-hover:scale-105 transition-transform"
                             />
                           ) : (
                             <span className="font-serif-luxury text-xs text-[#C5A880] italic">
                               F
                             </span>
                           )}
-                        </div>
+                        </Link>
                         <div>
-                          <strong className="block text-white font-medium">
+                          <Link
+                            href={`/admin/products/${prod.id}/edit`}
+                            className="block text-white font-medium hover:text-[#C5A880] transition-colors"
+                          >
                             {prod.name}
-                          </strong>
+                          </Link>
                           <span className="text-neutral-500 text-[10px] font-mono">
                             /{prod.slug}
                           </span>
@@ -146,13 +154,11 @@ export default async function AdminProductsPage() {
                         )}
                       </td>
                       <td className="p-4 text-right">
-                        <Link
-                          href={`/product/${prod.slug}`}
-                          target="_blank"
-                          className="text-[#C5A880] hover:underline"
-                        >
-                          View Piece ↗
-                        </Link>
+                        <ProductRowActions
+                          productId={prod.id}
+                          productName={prod.name}
+                          productSlug={prod.slug}
+                        />
                       </td>
                     </tr>
                   );

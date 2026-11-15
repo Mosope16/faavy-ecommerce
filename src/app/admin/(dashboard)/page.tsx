@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { formatNaira, formatDate } from "@/lib/utils";
 import {
   TrendingUp,
@@ -22,37 +22,39 @@ export default async function AdminOverviewPage() {
     lowStockVariants,
     recentOrders,
     productsCount,
-  ] = await Promise.all([
-    prisma.order.count(),
-    prisma.order.findMany({
-      where: {
-        payments: { some: { status: "PAID" } },
-      },
-      select: { totalInKobo: true },
-    }),
-    prisma.order.count({
-      where: {
-        status: { in: ["CONFIRMED", "PROCESSING", "READY_FOR_DISPATCH"] },
-      },
-    }),
-    prisma.productVariant.findMany({
-      where: {
-        stockQuantity: { lte: 3 },
-        product: { isMadeToOrder: false },
-      },
-      include: { product: true },
-      take: 5,
-    }),
-    prisma.order.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 6,
-      include: {
-        payments: true,
-        items: true,
-      },
-    }),
-    prisma.product.count({ where: { isActive: true } }),
-  ]);
+  ] = await withDbRetry(() =>
+    Promise.all([
+      prisma.order.count(),
+      prisma.order.findMany({
+        where: {
+          payments: { some: { status: "PAID" } },
+        },
+        select: { totalInKobo: true },
+      }),
+      prisma.order.count({
+        where: {
+          status: { in: ["CONFIRMED", "PROCESSING", "READY_FOR_DISPATCH"] },
+        },
+      }),
+      prisma.productVariant.findMany({
+        where: {
+          stockQuantity: { lte: 3 },
+          product: { isMadeToOrder: false },
+        },
+        include: { product: true },
+        take: 5,
+      }),
+      prisma.order.findMany({
+        orderBy: { createdAt: "desc" },
+        take: 6,
+        include: {
+          payments: true,
+          items: true,
+        },
+      }),
+      prisma.product.count({ where: { isActive: true } }),
+    ])
+  );
 
   const grossRevenueInKobo = paidOrders.reduce(
     (acc, order) => acc + order.totalInKobo,

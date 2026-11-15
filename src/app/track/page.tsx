@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import { formatNaira, formatDate } from "@/lib/utils";
 import { Search, Package, Clock, CheckCircle2, AlertCircle, Truck } from "lucide-react";
 import { FadeIn } from "@/components/motion/fade-in";
@@ -19,20 +19,26 @@ export default async function TrackPage({ searchParams }: TrackPageProps) {
 
   let order = null;
   if (orderNumber) {
-    order = await prisma.order.findFirst({
-      where: {
-        OR: [
-          { orderNumber: { equals: orderNumber, mode: "insensitive" } },
-          { id: orderNumber },
-        ],
-      },
-      include: {
-        items: true,
-        payments: true,
-        shipments: true,
-        shippingAddress: true,
-      },
-    });
+    try {
+      order = await withDbRetry(() =>
+        prisma.order.findFirst({
+          where: {
+            OR: [
+              { orderNumber: { equals: orderNumber, mode: "insensitive" } },
+              { id: orderNumber },
+            ],
+          },
+          include: {
+            items: true,
+            payments: true,
+            shipments: true,
+            shippingAddress: true,
+          },
+        })
+      );
+    } catch (err) {
+      console.error("[TrackPage] Database fetch failed:", err);
+    }
   }
 
   const statusColors: Record<string, string> = {

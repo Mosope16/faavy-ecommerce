@@ -11,7 +11,6 @@ import {
   Copy,
   ExternalLink,
   Edit2,
-  Sparkles,
 } from "lucide-react";
 
 interface ImageUploadDropzoneProps {
@@ -22,39 +21,6 @@ interface ImageUploadDropzoneProps {
   folder?: string;
   helperText?: string;
 }
-
-const CLOUDINARY_SAMPLES = [
-  {
-    name: "Executive Gown",
-    publicId: "cld-sample-5",
-    description: "Yellow couture dress",
-  },
-  {
-    name: "Editorial Style",
-    publicId: "cld-sample",
-    description: "Fashion editorial portrait",
-  },
-  {
-    name: "Handcrafted Bag",
-    publicId: "samples/ecommerce/accessories-bag",
-    description: "Corporate leather accessory",
-  },
-  {
-    name: "Executive Shoes",
-    publicId: "samples/ecommerce/shoes",
-    description: "Bespoke formal footwear",
-  },
-  {
-    name: "Leather Tote",
-    publicId: "samples/ecommerce/leather-bag-gray",
-    description: "Charcoal leather bag",
-  },
-  {
-    name: "Executive Portrait",
-    publicId: "samples/people/smiling-man",
-    description: "Gentleman corporate style",
-  },
-];
 
 export function ImageUploadDropzone({
   label,
@@ -69,7 +35,6 @@ export function ImageUploadDropzone({
   const [isDragOver, setIsDragOver] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showManualInput, setShowManualInput] = useState(false);
-  const [showSamples, setShowSamples] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = async (file: File) => {
@@ -112,9 +77,10 @@ export function ImageUploadDropzone({
       }
 
       onChange(data.url, data.publicId);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Cloudinary upload failed:", err);
-      setUploadError(err.message || "Failed to upload image. Please try again.");
+      const msg = err instanceof Error ? err.message : "Failed to upload image.";
+      setUploadError(msg);
     } finally {
       setIsUploading(false);
     }
@@ -150,82 +116,40 @@ export function ImageUploadDropzone({
         <label className="block text-[10px] uppercase font-bold tracking-wider text-neutral-400">
           {label} {required && <span className="text-[#C5A880]">*</span>}
         </label>
-        <div className="flex items-center gap-3">
+        <div>
           <button
             type="button"
-            onClick={() => {
-              setShowSamples(!showSamples);
-              setShowManualInput(false);
-            }}
-            className="text-[10px] text-[#C5A880] hover:underline transition-colors flex items-center gap-1"
-          >
-            <Sparkles className="h-3 w-3" />
-            <span>{showSamples ? "Hide Samples" : "Cloudinary Samples"}</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setShowManualInput(!showManualInput);
-              setShowSamples(false);
-            }}
+            onClick={() => setShowManualInput(!showManualInput)}
             className="text-[10px] text-neutral-500 hover:text-[#C5A880] transition-colors"
           >
-            {showManualInput ? "Hide manual URL" : "Manual URL input"}
+            {showManualInput ? "Hide manual URL" : "Paste image URL"}
           </button>
         </div>
       </div>
 
-      {/* Cloudinary Sample Selector */}
-      {showSamples && (
-        <div className="p-3 bg-[#161616] border border-[#2E2E2E] rounded-xs space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-[#C5A880]">
-              Cloudinary Account Samples ({CLOUDINARY_SAMPLES.length})
-            </span>
-            <span className="text-[9px] text-neutral-500">
-              Instant 1-Click Select
-            </span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-            {CLOUDINARY_SAMPLES.map((sample) => {
-              const cloudName =
-                process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "y7rd6ddp";
-              const sampleUrl = `https://res.cloudinary.com/${cloudName}/image/upload/${sample.publicId}.jpg`;
-              const isSelected = value === sampleUrl;
-              return (
-                <button
-                  key={sample.publicId}
-                  type="button"
-                  onClick={() => {
-                    onChange(sampleUrl, sample.publicId);
-                    setShowSamples(false);
-                  }}
-                  className={`flex items-center gap-2.5 p-2 rounded-xs border text-left transition-all ${
-                    isSelected
-                      ? "border-[#C5A880] bg-[#C5A880]/15 text-white"
-                      : "border-[#262626] bg-[#1E1E1E] hover:border-[#383838] text-neutral-300 hover:text-white"
-                  }`}
-                >
-                  <div className="relative h-10 w-10 shrink-0 rounded-xs overflow-hidden bg-black/40 border border-[#333333]">
-                    <Image
-                      src={sampleUrl}
-                      alt={sample.name}
-                      fill
-                      className="object-cover"
-                      sizes="40px"
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="text-xs font-medium block truncate text-white">
-                      {sample.name}
-                    </span>
-                    <span className="text-[9px] text-neutral-500 block truncate">
-                      {sample.description}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
+      {/* Manual URL Input Field */}
+      {showManualInput && (
+        <div className="p-3 bg-[#1A1A1A] border border-[#2E2E2E] rounded-xs space-y-2">
+          <label className="block text-[9px] uppercase font-bold text-neutral-400">
+            Direct Image URL
+          </label>
+          <div className="flex gap-2">
+            <input
+              type="url"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              placeholder="https://res.cloudinary.com/... or https://..."
+              className="flex-1 bg-[#121212] border border-[#333333] px-3 py-2 text-xs text-white focus:border-[#C5A880] focus:outline-hidden"
+            />
+            {value && (
+              <button
+                type="button"
+                onClick={() => onChange("")}
+                className="px-3 py-2 bg-neutral-800 text-neutral-300 hover:text-white text-xs rounded-xs"
+              >
+                Clear
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -249,13 +173,11 @@ export function ImageUploadDropzone({
           <div className="flex-1 min-w-0 space-y-1.5 w-full text-center sm:text-left">
             <div className="flex items-center justify-center sm:justify-start gap-1.5 text-xs text-emerald-400">
               <Check className="h-3.5 w-3.5" />
-              <span className="font-medium text-[11px]">
-                {value.includes("res.cloudinary.com")
-                  ? "Cloudinary Asset Ready"
-                  : "External Image Linked"}
+              <span className="font-medium text-[11px] uppercase tracking-wider">
+                Garment Image Ready
               </span>
             </div>
-            <p className="text-[10px] text-neutral-400 truncate font-mono">
+            <p className="text-[10px] text-neutral-400 truncate font-mono max-w-full">
               {value}
             </p>
 
@@ -264,7 +186,7 @@ export function ImageUploadDropzone({
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] rounded-xs bg-[#2A2A2A] hover:bg-[#333333] text-neutral-200 hover:text-white transition-colors"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider bg-[#262626] hover:bg-[#333333] text-neutral-200 rounded-xs border border-[#383838] transition-colors"
               >
                 <Edit2 className="h-3 w-3" />
                 <span>Replace</span>
@@ -273,26 +195,19 @@ export function ImageUploadDropzone({
               <button
                 type="button"
                 onClick={handleCopyUrl}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] rounded-xs bg-[#2A2A2A] hover:bg-[#333333] text-neutral-200 hover:text-white transition-colors"
+                className="inline-flex items-center gap-1 px-2 py-1 text-[10px] text-neutral-400 hover:text-white bg-[#262626] hover:bg-[#333333] rounded-xs border border-[#383838] transition-colors"
+                title="Copy URL"
               >
-                {copied ? (
-                  <>
-                    <Check className="h-3 w-3 text-emerald-400" />
-                    <span className="text-emerald-400">Copied</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-3 w-3" />
-                    <span>Copy URL</span>
-                  </>
-                )}
+                <Copy className="h-3 w-3" />
+                <span>{copied ? "Copied" : "Copy"}</span>
               </button>
 
               <a
                 href={value}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-2 py-1 text-[11px] text-neutral-400 hover:text-white transition-colors"
+                className="inline-flex items-center gap-1 px-2 py-1 text-[10px] text-neutral-400 hover:text-[#C5A880] bg-[#262626] hover:bg-[#333333] rounded-xs border border-[#383838] transition-colors"
+                title="Open original"
               >
                 <ExternalLink className="h-3 w-3" />
               </a>
@@ -300,11 +215,10 @@ export function ImageUploadDropzone({
               <button
                 type="button"
                 onClick={() => onChange("")}
-                disabled={isUploading}
-                className="inline-flex items-center gap-1 px-2 py-1 text-[11px] text-red-400 hover:text-red-300 transition-colors ml-auto"
+                className="inline-flex items-center gap-1 px-2 py-1 text-[10px] text-rose-400 hover:text-rose-300 bg-rose-950/40 hover:bg-rose-950/80 rounded-xs border border-rose-900/60 transition-colors ml-auto"
                 title="Remove image"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-3 w-3" />
                 <span>Remove</span>
               </button>
             </div>
@@ -318,42 +232,42 @@ export function ImageUploadDropzone({
           }}
           onDragLeave={() => setIsDragOver(false)}
           onDrop={handleDrop}
-          onClick={() => !isUploading && fileInputRef.current?.click()}
-          className={`relative rounded-xs border-2 border-dashed p-6 text-center cursor-pointer transition-all ${
+          onClick={() => fileInputRef.current?.click()}
+          className={`relative flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xs cursor-pointer transition-all ${
             isDragOver
-              ? "border-[#C5A880] bg-[#C5A880]/5"
-              : "border-[#333333] hover:border-[#C5A880]/60 bg-[#1A1A1A]/70 hover:bg-[#1A1A1A]"
+              ? "border-[#C5A880] bg-[#C5A880]/10"
+              : "border-[#333333] hover:border-[#555555] bg-[#161616]"
           }`}
         >
           {isUploading ? (
-            <div className="flex flex-col items-center justify-center space-y-2 py-2">
-              <Loader2 className="h-7 w-7 text-[#C5A880] animate-spin" />
-              <span className="text-xs font-medium text-white">
-                Uploading directly to Cloudinary...
+            <div className="flex flex-col items-center gap-2 py-4 text-center">
+              <Loader2 className="h-8 w-8 text-[#C5A880] animate-spin" />
+              <span className="text-xs font-semibold text-white uppercase tracking-wider">
+                Uploading to Cloudinary...
               </span>
-              <span className="text-[10px] text-neutral-400">
-                Optimizing image for luxury storefront presentation
+              <span className="text-[10px] text-neutral-500">
+                Optimizing garment resolution
               </span>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <div className="h-10 w-10 rounded-full bg-[#242424] border border-[#333333] flex items-center justify-center text-[#C5A880]">
+            <div className="flex flex-col items-center gap-2 py-2 text-center">
+              <div className="h-10 w-10 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center text-[#C5A880]">
                 <UploadCloud className="h-5 w-5" />
               </div>
-              <div className="space-y-0.5">
-                <p className="text-xs font-medium text-white">
+              <div>
+                <span className="text-xs font-semibold text-white block">
                   Click to browse or drag & drop garment photo
-                </p>
-                <p className="text-[10px] text-neutral-500">
-                  JPEG, PNG, WebP or AVIF (Up to 10MB)
-                </p>
+                </span>
+                <span className="text-[10px] text-neutral-400 block mt-0.5">
+                  Supports JPEG, PNG, WebP, AVIF up to 10MB
+                </span>
               </div>
             </div>
           )}
         </div>
       )}
 
-      {/* Hidden file input */}
+      {/* Hidden File Input */}
       <input
         ref={fileInputRef}
         type="file"
@@ -362,28 +276,16 @@ export function ImageUploadDropzone({
         className="hidden"
       />
 
-      {/* Manual Input Fallback */}
-      {showManualInput && (
-        <div className="pt-2">
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder="https://res.cloudinary.com/... or paste image URL"
-            className="w-full bg-[#1F1F1F] border border-[#333333] p-2.5 text-xs text-white focus:border-[#C5A880] focus:outline-hidden font-mono"
-          />
-        </div>
-      )}
-
       {/* Error Message */}
       {uploadError && (
-        <div className="flex items-center gap-1.5 text-xs text-red-400 bg-red-950/40 border border-red-900/60 p-2.5 rounded-xs">
-          <AlertCircle className="h-4 w-4 shrink-0" />
+        <div className="flex items-center gap-1.5 text-xs text-rose-400 bg-rose-950/40 p-2 border border-rose-900 rounded-xs">
+          <AlertCircle className="h-3.5 w-3.5 shrink-0" />
           <span>{uploadError}</span>
         </div>
       )}
 
-      {helperText && !uploadError && (
+      {/* Helper text */}
+      {helperText && (
         <p className="text-[10px] text-neutral-500">{helperText}</p>
       )}
     </div>

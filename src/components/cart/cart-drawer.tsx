@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -27,6 +28,12 @@ export function CartDrawer() {
   if (pathname?.startsWith("/admin")) {
     return null;
   }
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Lock body scroll when cart drawer is open
   React.useEffect(() => {
@@ -61,10 +68,12 @@ export function CartDrawer() {
     subtotalInKobo,
   });
 
-  return (
+  if (!isMounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isCartOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end">
+        <div className="fixed inset-0 z-[9999] flex justify-end">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -81,7 +90,7 @@ export function CartDrawer() {
             initial="closed"
             animate="open"
             exit="closed"
-            className="relative z-10 flex h-full w-full max-w-md flex-col bg-[#FAF8F5] text-[#1A1A1A] shadow-2xl"
+            className="relative z-10 flex h-full h-[100dvh] max-h-screen w-full max-w-md flex-col bg-[#FAF8F5] text-[#1A1A1A] shadow-2xl overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-[#E8E3D8] px-4 sm:px-6 py-4 sm:py-5">
@@ -252,6 +261,7 @@ export function CartDrawer() {
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

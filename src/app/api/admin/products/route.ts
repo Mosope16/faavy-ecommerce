@@ -76,48 +76,54 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const product = await prisma.$transaction(async (tx) => {
-      const created = await tx.product.create({
-        data: {
-          ...prodData,
-          images: {
-            create: (images || []).map((img, idx) => ({
-              url: img.url,
-              publicId: img.publicId || null,
-              altText: img.altText,
-              isPrimary: img.isPrimary,
-              displayOrder: idx,
-            })),
-          },
-          variants: {
-            create: variants.map((v) => ({
-              ...v,
-            })),
-          },
-        },
-        include: {
-          variants: true,
-          images: true,
-          category: true,
-        },
-      });
-
-      // Record initial inventory movements
-      for (const v of created.variants) {
-        if (v.stockQuantity > 0) {
-          await tx.inventoryMovement.create({
-            data: {
-              variantId: v.id,
-              quantityChange: v.stockQuantity,
-              reason: "RESTOCK",
-              notes: "Initial inventory allocation on product creation",
+    const product = await prisma.$transaction(
+      async (tx) => {
+        const created = await tx.product.create({
+          data: {
+            ...prodData,
+            images: {
+              create: (images || []).map((img, idx) => ({
+                url: img.url,
+                publicId: img.publicId || null,
+                altText: img.altText,
+                isPrimary: img.isPrimary,
+                displayOrder: idx,
+              })),
             },
-          });
-        }
-      }
+            variants: {
+              create: variants.map((v) => ({
+                ...v,
+              })),
+            },
+          },
+          include: {
+            variants: true,
+            images: true,
+            category: true,
+          },
+        });
 
-      return created;
-    });
+        // Record initial inventory movements
+        for (const v of created.variants) {
+          if (v.stockQuantity > 0) {
+            await tx.inventoryMovement.create({
+              data: {
+                variantId: v.id,
+                quantityChange: v.stockQuantity,
+                reason: "RESTOCK",
+                notes: "Initial inventory allocation on product creation",
+              },
+            });
+          }
+        }
+
+        return created;
+      },
+      {
+        maxWait: 15000,
+        timeout: 30000,
+      }
+    );
 
     return NextResponse.json({ success: true, product });
   } catch (error) {

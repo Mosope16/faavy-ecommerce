@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Sparkles, Scissors, Clock, ShieldCheck, MessageCircle } from "lucide-react";
-import { prisma } from "@/lib/prisma";
+import { prisma, withDbRetry } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { ProductCard } from "@/components/ui/product-card";
 import { FadeIn } from "@/components/motion/fade-in";
@@ -30,25 +30,27 @@ export default async function HomePage() {
   let categories: CategoryItem[] = [];
   let storeSettings: Awaited<ReturnType<typeof prisma.storeSettings.findUnique>> = null;
   try {
-    [featuredProducts, categories, storeSettings] = await Promise.all([
-      prisma.product.findMany({
-        where: { isActive: true, isFeatured: true },
-        include: {
-          category: true,
-          images: { orderBy: { displayOrder: "asc" } },
-          variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
-        },
-        take: 6,
-      }),
-      prisma.category.findMany({
-        where: { isActive: true },
-        orderBy: { displayOrder: "asc" },
-        take: 4,
-      }),
-      prisma.storeSettings.findUnique({
-        where: { id: "default" },
-      }),
-    ]);
+    [featuredProducts, categories, storeSettings] = await withDbRetry(() =>
+      Promise.all([
+        prisma.product.findMany({
+          where: { isActive: true, isFeatured: true },
+          include: {
+            category: true,
+            images: { orderBy: { displayOrder: "asc" } },
+            variants: { where: { isActive: true }, orderBy: { stockQuantity: "desc" } },
+          },
+          take: 6,
+        }),
+        prisma.category.findMany({
+          where: { isActive: true },
+          orderBy: { displayOrder: "asc" },
+          take: 4,
+        }),
+        prisma.storeSettings.findUnique({
+          where: { id: "default" },
+        }),
+      ])
+    );
   } catch (err) {
     // Log server-side; storefront renders with empty collections gracefully.
     console.error("[HomePage] Database fetch failed:", err);
