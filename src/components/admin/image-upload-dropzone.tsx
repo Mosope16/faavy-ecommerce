@@ -11,6 +11,7 @@ import {
   Copy,
   ExternalLink,
   Edit2,
+  Sparkles,
 } from "lucide-react";
 
 interface ImageUploadDropzoneProps {
@@ -21,6 +22,39 @@ interface ImageUploadDropzoneProps {
   folder?: string;
   helperText?: string;
 }
+
+const CLOUDINARY_SAMPLES = [
+  {
+    name: "Executive Gown",
+    publicId: "cld-sample-5",
+    description: "Yellow couture dress",
+  },
+  {
+    name: "Editorial Style",
+    publicId: "cld-sample",
+    description: "Fashion editorial portrait",
+  },
+  {
+    name: "Handcrafted Bag",
+    publicId: "samples/ecommerce/accessories-bag",
+    description: "Corporate leather accessory",
+  },
+  {
+    name: "Executive Shoes",
+    publicId: "samples/ecommerce/shoes",
+    description: "Bespoke formal footwear",
+  },
+  {
+    name: "Leather Tote",
+    publicId: "samples/ecommerce/leather-bag-gray",
+    description: "Charcoal leather bag",
+  },
+  {
+    name: "Executive Portrait",
+    publicId: "samples/people/smiling-man",
+    description: "Gentleman corporate style",
+  },
+];
 
 export function ImageUploadDropzone({
   label,
@@ -35,6 +69,7 @@ export function ImageUploadDropzone({
   const [isDragOver, setIsDragOver] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showManualInput, setShowManualInput] = useState(false);
+  const [showSamples, setShowSamples] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = async (file: File) => {
@@ -111,18 +146,89 @@ export function ImageUploadDropzone({
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <label className="block text-[10px] uppercase font-bold tracking-wider text-neutral-400">
           {label} {required && <span className="text-[#C5A880]">*</span>}
         </label>
-        <button
-          type="button"
-          onClick={() => setShowManualInput(!showManualInput)}
-          className="text-[10px] text-neutral-500 hover:text-[#C5A880] transition-colors"
-        >
-          {showManualInput ? "Hide manual URL" : "Manual URL input"}
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setShowSamples(!showSamples);
+              setShowManualInput(false);
+            }}
+            className="text-[10px] text-[#C5A880] hover:underline transition-colors flex items-center gap-1"
+          >
+            <Sparkles className="h-3 w-3" />
+            <span>{showSamples ? "Hide Samples" : "Cloudinary Samples"}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setShowManualInput(!showManualInput);
+              setShowSamples(false);
+            }}
+            className="text-[10px] text-neutral-500 hover:text-[#C5A880] transition-colors"
+          >
+            {showManualInput ? "Hide manual URL" : "Manual URL input"}
+          </button>
+        </div>
       </div>
+
+      {/* Cloudinary Sample Selector */}
+      {showSamples && (
+        <div className="p-3 bg-[#161616] border border-[#2E2E2E] rounded-xs space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-[#C5A880]">
+              Cloudinary Account Samples ({CLOUDINARY_SAMPLES.length})
+            </span>
+            <span className="text-[9px] text-neutral-500">
+              Instant 1-Click Select
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+            {CLOUDINARY_SAMPLES.map((sample) => {
+              const cloudName =
+                process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || "y7rd6ddp";
+              const sampleUrl = `https://res.cloudinary.com/${cloudName}/image/upload/${sample.publicId}.jpg`;
+              const isSelected = value === sampleUrl;
+              return (
+                <button
+                  key={sample.publicId}
+                  type="button"
+                  onClick={() => {
+                    onChange(sampleUrl, sample.publicId);
+                    setShowSamples(false);
+                  }}
+                  className={`flex items-center gap-2.5 p-2 rounded-xs border text-left transition-all ${
+                    isSelected
+                      ? "border-[#C5A880] bg-[#C5A880]/15 text-white"
+                      : "border-[#262626] bg-[#1E1E1E] hover:border-[#383838] text-neutral-300 hover:text-white"
+                  }`}
+                >
+                  <div className="relative h-10 w-10 shrink-0 rounded-xs overflow-hidden bg-black/40 border border-[#333333]">
+                    <Image
+                      src={sampleUrl}
+                      alt={sample.name}
+                      fill
+                      className="object-cover"
+                      sizes="40px"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-xs font-medium block truncate text-white">
+                      {sample.name}
+                    </span>
+                    <span className="text-[9px] text-neutral-500 block truncate">
+                      {sample.description}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Upload Dropzone or Preview */}
       {value ? (

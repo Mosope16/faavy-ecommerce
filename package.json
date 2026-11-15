@@ -9,7 +9,8 @@
     "lint": "eslint",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "db:seed": "node scripts/seed.mjs"
+    "db:seed": "node scripts/seed.mjs",
+    "db:samples": "node scripts/apply-sample-images.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",
