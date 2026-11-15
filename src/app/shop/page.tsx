@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/ui/product-card";
 import { FadeIn } from "@/components/motion/fade-in";
 import { StaggerContainer, StaggerItem } from "@/components/motion/stagger-container";
 import { Filter, Search as SearchIcon, X } from "lucide-react";
+import { ShopSortSelect } from "@/components/shop/shop-sort-select";
 
 type ShopProduct = Prisma.ProductGetPayload<{
   include: { category: true; images: true; variants: true };
@@ -176,32 +177,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             </Link>
 
             {/* Sort Dropdown */}
-            <form method="GET" action="/shop" className="inline-flex items-center">
-              {selectedCategory && (
-                <input type="hidden" name="category" value={selectedCategory} />
-              )}
-              {isMadeToOrderFilter !== undefined && (
-                <input
-                  type="hidden"
-                  name="madeToOrder"
-                  value={String(isMadeToOrderFilter)}
-                />
-              )}
-              {searchQuery && (
-                <input type="hidden" name="search" value={searchQuery} />
-              )}
-              <select
-                name="sort"
-                defaultValue={sortParam}
-                onChange={(e) => e.target.form?.submit()}
-                aria-label="Sort products"
-                className="bg-white border border-[#E8E3D8] px-2.5 py-2 text-xs uppercase tracking-wider text-neutral-800 focus:border-[#1A1A1A] focus:outline-hidden min-h-[36px]"
-              >
-                <option value="newest">Sort: Newest</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-              </select>
-            </form>
+            <ShopSortSelect currentSort={sortParam} />
 
             {/* Clear Filters Reset */}
             {(selectedCategory ||
