@@ -122,7 +122,7 @@ export function CartDrawer() {
               )}
               <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#E5E0D5]">
                 <div
-                  className="h-full bg-[#C5A880] transition-all duration-500"
+                  className="h-full bg-[#C5A880] transition-[width] duration-500"
                   style={{ width: `${progressToFreeShipping}%` }}
                 />
               </div>
@@ -173,7 +173,7 @@ export function CartDrawer() {
                           </h4>
                           <button
                             onClick={() => removeItem(item.variantId)}
-                            className="p-1 min-h-[36px] min-w-[36px] flex items-center justify-center text-neutral-400 hover:text-red-700 transition-colors"
+                            className="btn-tactile active:scale-90 p-1 min-h-[36px] min-w-[36px] flex items-center justify-center text-neutral-400 hover:text-red-700 transition-colors"
                             aria-label={`Remove ${item.name} from bag`}
                           >
                             <Trash2 className="h-4 w-4" />
@@ -195,25 +195,25 @@ export function CartDrawer() {
                             onClick={() =>
                               updateQuantity(item.variantId, item.quantity - 1)
                             }
-                            className="p-1.5 sm:p-2 min-h-[36px] min-w-[36px] flex items-center justify-center text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB]"
+                            className="btn-tactile active:scale-90 p-1.5 sm:p-2 min-h-[36px] min-w-[36px] flex items-center justify-center text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB] transition-colors"
                             aria-label="Decrease quantity"
                           >
                             <Minus className="h-3 w-3" />
                           </button>
-                          <span className="px-2 sm:px-2.5 text-xs font-medium select-none">
+                          <span className="px-2 sm:px-2.5 text-xs font-medium tabular-nums select-none">
                             {item.quantity}
                           </span>
                           <button
                             onClick={() =>
                               updateQuantity(item.variantId, item.quantity + 1)
                             }
-                            className="p-1.5 sm:p-2 min-h-[36px] min-w-[36px] flex items-center justify-center text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB]"
+                            className="btn-tactile active:scale-90 p-1.5 sm:p-2 min-h-[36px] min-w-[36px] flex items-center justify-center text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB] transition-colors"
                             aria-label="Increase quantity"
                           >
                             <Plus className="h-3 w-3" />
                           </button>
                         </div>
-                        <span className="text-xs sm:text-sm font-semibold text-[#1A1A1A]">
+                        <span className="text-xs sm:text-sm font-semibold tabular-nums text-[#1A1A1A]">
                           {formatNaira(item.priceInKobo * item.quantity)}
                         </span>
                       </div>
@@ -228,7 +228,7 @@ export function CartDrawer() {
               <div className="border-t border-[#E8E3D8] bg-[#F5F2EB] px-4 sm:px-6 py-4 sm:py-5">
                 <div className="flex items-center justify-between text-sm mb-1">
                   <span className="text-neutral-500">Subtotal</span>
-                  <span className="font-serif-luxury text-base sm:text-lg font-semibold text-[#1A1A1A]">
+                  <span className="font-serif-luxury tabular-nums text-base sm:text-lg font-semibold text-[#1A1A1A]">
                     {formatNaira(subtotalInKobo)}
                   </span>
                 </div>
@@ -240,7 +240,7 @@ export function CartDrawer() {
                   <Link
                     href="/checkout"
                     onClick={() => setIsCartOpen(false)}
-                    className="flex w-full items-center justify-center gap-2 bg-[#1A1A1A] px-4 sm:px-5 py-3 sm:py-3.5 text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-[#FAF8F5] hover:bg-[#C5A880] transition-colors min-h-[44px]"
+                    className="btn-tactile active:scale-[0.97] flex w-full items-center justify-center gap-2 bg-[#1A1A1A] px-4 sm:px-5 py-3 sm:py-3.5 text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-[#FAF8F5] hover:bg-[#C5A880] transition-colors min-h-[44px]"
                   >
                     <span>Proceed to Checkout</span>
                     <ArrowRight className="h-4 w-4" />
@@ -250,7 +250,7 @@ export function CartDrawer() {
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex w-full items-center justify-center gap-2 border border-[#C5A880] bg-white px-4 sm:px-5 py-2.5 sm:py-3 text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-[#8C6F45] hover:bg-[#FAF8F5] transition-colors min-h-[44px]"
+                    className="btn-tactile active:scale-[0.97] flex w-full items-center justify-center gap-2 border border-[#C5A880] bg-white px-4 sm:px-5 py-2.5 sm:py-3 text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-[#8C6F45] hover:bg-[#FAF8F5] transition-colors min-h-[44px]"
                   >
                     <MessageCircle className="h-4 w-4 text-[#25D366] shrink-0" />
                     <span className="truncate">Order via WhatsApp</span>

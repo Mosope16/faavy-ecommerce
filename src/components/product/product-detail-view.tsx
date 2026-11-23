@@ -141,7 +141,7 @@ export function ProductDetailView({
               <button
                 key={img.id}
                 onClick={() => setSelectedImageIndex(idx)}
-                className={`relative h-20 w-16 sm:h-24 sm:w-20 overflow-hidden bg-[#F5F2EB] border transition-all ${
+                className={`btn-tactile active:scale-95 relative h-20 w-16 sm:h-24 sm:w-20 overflow-hidden bg-[#F5F2EB] border transition-[border-color,opacity] ${
                   selectedImageIndex === idx
                     ? "border-[#8C6F45] ring-1 ring-[#8C6F45]"
                     : "border-[#E8E3D8] hover:border-neutral-400 opacity-70 hover:opacity-100"
@@ -271,7 +271,7 @@ export function ProductDetailView({
                         setQuantity(1);
                       }}
                       disabled={isVarOutOfStock}
-                      className={`relative flex flex-col items-start p-2.5 sm:p-3 text-left border transition-all min-h-[48px] justify-center ${
+                      className={`relative flex flex-col items-start p-2.5 sm:p-3 text-left border btn-tactile active:scale-[0.97] min-h-[48px] justify-center transition-colors ${
                         isSelected
                           ? "border-[#1A1A1A] bg-[#1A1A1A] text-white"
                           : isVarOutOfStock
@@ -322,12 +322,12 @@ export function ProductDetailView({
             <div className="flex items-center border border-[#E8E3D8] bg-white">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="p-2.5 sm:p-3 min-w-[40px] min-h-[40px] flex items-center justify-center text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB]"
+                className="btn-tactile active:scale-90 p-2.5 sm:p-3 min-w-[40px] min-h-[40px] flex items-center justify-center text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB] transition-colors"
                 aria-label="Decrease quantity"
               >
                 <Minus className="h-3.5 w-3.5" />
               </button>
-              <span className="px-4 text-xs font-semibold select-none">{quantity}</span>
+              <span className="px-4 text-xs font-semibold tabular-nums select-none">{quantity}</span>
               <button
                 onClick={() => {
                   const maxAllowed = product.isMadeToOrder
@@ -335,7 +335,7 @@ export function ProductDetailView({
                     : activeVariant?.stockQuantity || 1;
                   setQuantity(Math.min(maxAllowed, quantity + 1));
                 }}
-                className="p-2.5 sm:p-3 min-w-[40px] min-h-[40px] flex items-center justify-center text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB]"
+                className="btn-tactile active:scale-90 p-2.5 sm:p-3 min-w-[40px] min-h-[40px] flex items-center justify-center text-neutral-600 hover:text-[#1A1A1A] hover:bg-[#F5F2EB] transition-colors"
                 aria-label="Increase quantity"
               >
                 <Plus className="h-3.5 w-3.5" />
@@ -348,7 +348,7 @@ export function ProductDetailView({
             <button
               onClick={handleAddToCart}
               disabled={isOutOfStock || justAdded}
-              className={`w-full flex items-center justify-center gap-2.5 px-6 py-4 text-xs font-semibold uppercase tracking-[0.2em] transition-all shadow-md min-h-[48px] ${
+              className={`w-full btn-tactile active:scale-[0.97] flex items-center justify-center gap-2.5 px-6 py-4 text-xs font-semibold uppercase tracking-[0.2em] transition-colors shadow-md min-h-[48px] ${
                 isOutOfStock
                   ? "bg-neutral-300 text-neutral-500 cursor-not-allowed"
                   : justAdded
@@ -376,7 +376,7 @@ export function ProductDetailView({
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2.5 border border-[#25D366] bg-white px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#121212] hover:bg-[#E8F8EE] transition-colors min-h-[48px]"
+              className="w-full btn-tactile active:scale-[0.97] flex items-center justify-center gap-2.5 border border-[#25D366] bg-white px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-[#121212] hover:bg-[#E8F8EE] transition-colors min-h-[48px]"
             >
               <MessageCircle className="h-4 w-4 text-[#25D366] shrink-0" />
               <span>Enquire & Order via WhatsApp</span>

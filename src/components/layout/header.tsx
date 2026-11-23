@@ -74,19 +74,19 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#E8E3D8] transition-all">
+      <header className="sticky top-0 z-40 w-full bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#E8E3D8] transition-colors">
         <div className="relative mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-8">
           {/* Mobile Menu Trigger (Hairline Luxury Bars) */}
           <div className="flex items-center lg:hidden z-10">
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="group flex items-center gap-2 p-2 min-h-[44px] min-w-[44px] text-[#1A1A1A] hover:text-[#C5A880] transition-colors focus:outline-hidden"
+              className="group btn-tactile active:scale-95 flex items-center gap-2 p-2 min-h-[44px] min-w-[44px] text-[#1A1A1A] hover:text-[#C5A880] transition-colors focus:outline-hidden"
               aria-label="Open Navigation Menu"
               aria-expanded={isMobileMenuOpen}
             >
               <div className="flex flex-col justify-center items-start w-5 h-4 gap-1.5">
-                <span className="h-[1.5px] w-5 bg-current transition-all duration-300" />
-                <span className="h-[1.5px] w-3.5 bg-current transition-all duration-300 group-hover:w-5" />
+                <span className="h-[1.5px] w-5 bg-current transition-transform duration-300" />
+                <span className="h-[1.5px] w-3.5 bg-current transition-[width] duration-300 group-hover:w-5" />
               </div>
               <span className="hidden sm:inline-block text-[10px] uppercase tracking-[0.2em] font-medium text-neutral-600 group-hover:text-[#1A1A1A] transition-colors">
                 Menu
@@ -243,7 +243,7 @@ export function Header() {
                     </div>
                     <button
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="h-9 w-9 rounded-full border border-[#E8E3D8] hover:border-[#1A1A1A] hover:bg-[#F5F2EB] flex items-center justify-center text-[#1A1A1A] transition-all min-h-[36px] min-w-[36px]"
+                      className="btn-tactile active:scale-90 h-9 w-9 rounded-full border border-[#E8E3D8] hover:border-[#1A1A1A] hover:bg-[#F5F2EB] flex items-center justify-center text-[#1A1A1A] transition-colors min-h-[36px] min-w-[36px]"
                       aria-label="Close Navigation Menu"
                     >
                       <X className="h-4 w-4" />

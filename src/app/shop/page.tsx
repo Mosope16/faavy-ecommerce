@@ -118,7 +118,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           <div className="flex items-center gap-2 overflow-x-auto pb-1.5 sm:pb-0 sm:flex-wrap scrollbar-none -mx-1 px-1 sm:mx-0 sm:px-0">
             <Link
               href={`/shop${sortParam !== "newest" ? `?sort=${sortParam}` : ""}`}
-              className={`shrink-0 px-3.5 py-2 text-xs uppercase tracking-wider transition-colors min-h-[36px] flex items-center ${
+              className={`shrink-0 btn-tactile active:scale-95 px-3.5 py-2 text-xs uppercase tracking-wider transition-colors min-h-[36px] flex items-center ${
                 !selectedCategory
                   ? "bg-[#1A1A1A] text-white font-semibold"
                   : "bg-white text-neutral-700 border border-[#E8E3D8] hover:border-[#1A1A1A]"
@@ -134,7 +134,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                   href={`/shop?category=${cat.slug}${
                     sortParam !== "newest" ? `&sort=${sortParam}` : ""
                   }`}
-                  className={`shrink-0 px-3.5 py-2 text-xs uppercase tracking-wider transition-colors min-h-[36px] flex items-center ${
+                  className={`shrink-0 btn-tactile active:scale-95 px-3.5 py-2 text-xs uppercase tracking-wider transition-colors min-h-[36px] flex items-center ${
                     isSelected
                       ? "bg-[#1A1A1A] text-white font-semibold"
                       : "bg-white text-neutral-700 border border-[#E8E3D8] hover:border-[#1A1A1A]"
@@ -154,7 +154,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 ...(isMadeToOrderFilter !== true ? { madeToOrder: "true" } : {}),
                 ...(sortParam !== "newest" ? { sort: sortParam } : {}),
               }).toString()}`}
-              className={`px-3 py-2 text-xs uppercase tracking-wider border transition-colors min-h-[36px] flex items-center ${
+              className={`btn-tactile active:scale-95 px-3 py-2 text-xs uppercase tracking-wider border transition-colors min-h-[36px] flex items-center ${
                 isMadeToOrderFilter === true
                   ? "bg-[#8C6F45] text-white border-[#8C6F45] font-semibold"
                   : "bg-white text-neutral-700 border-[#E8E3D8] hover:border-[#8C6F45]"
@@ -169,7 +169,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 ...(isMadeToOrderFilter !== false ? { madeToOrder: "false" } : {}),
                 ...(sortParam !== "newest" ? { sort: sortParam } : {}),
               }).toString()}`}
-              className={`px-3 py-2 text-xs uppercase tracking-wider border transition-colors min-h-[36px] flex items-center ${
+              className={`btn-tactile active:scale-95 px-3 py-2 text-xs uppercase tracking-wider border transition-colors min-h-[36px] flex items-center ${
                 isMadeToOrderFilter === false
                   ? "bg-[#1A1A1A] text-white border-[#1A1A1A] font-semibold"
                   : "bg-white text-neutral-700 border-[#E8E3D8] hover:border-[#1A1A1A]"
